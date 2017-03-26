@@ -1,0 +1,178 @@
+\documentclass[letterpaper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{natbib,alifexi}
+\usepackage{amsmath}
+\usepackage{url}
+
+\title{Manipulations de grands entiers: arithmétique multiprécision}
+\author{Thomas Perale^{1}$\\
+    \mbox{}\\\\
+    $^1$Université Libre de Bruxelles, Département d'Informatique\\
+    tperale@ulb.ac.be}
+
+\setlength{\parskip}{0.5em}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+
+\end{abstract}
+
+\section{Introduction}
+
+L'arithmétique multiprécision offre des méthodes pour faire des opérations sur
+des nombres d'une taille arbitraire.
+Les algorithmes de multiprécision sont particulièrement utiles lorsqu'ils sont
+executé pour faire des opérations sur un ordinateur.
+Le problème est relativement trivial pour l'addition et la soustraction car
+la taille du résultat d'une opérations de deux entiers de taille \emph{n} est
+toujours de \emph{n} avec un report éventuelle.
+L'arithmétique multiprécision prend tout son sens lors de la multiplication,
+car la multiplication d'un entier de taille \emph{m} par un entier de taille
+\emph{n} donne une réponse de taille \emph{(m + n)} en utilisant des
+algorithmes classiques\cite{knuth1997aocp}.
+
+\section{État de l'art}
+
+\subsection{Méthode classique}
+
+Les méthodes classique, sont décrites comme l'ensemble des méthodes primitives
+d'un ordinateur\cite{knuth1997aocp}, c'est à dire:
+
+\begin{itemize}
+    \item L'addition ou soustraction de deux entiers de taille (n) qui donne
+        un résultat de la même taille avec un report éventuelle.
+    \item La multiplication d'un entier de taille (n) avec un autre de taille
+        (m) qui donne un résultat de taille (n + m).
+    \item La division d'un entier d'une taille (m) par un autre d'une taille
+        (n) qui donne un résultat d'une taille (m) avec un reste éventuel de
+        taille (m).
+\end{itemize}
+
+Les algorithmes des méthodes primitives sont identiques à celles qu'on effectue
+pour résoudre un calcul à l'aide de la méthode \emph{calcul écrit} sur papier
+\cite{knuth1997aocp}.
+
+\subsubsection{Algorithme de multiplication classique}
+
+L'algorithme classique de la multiplation pour deux entiers $u X v$ avec
+$u = (u_1, u_2, \dots u_n)$ et $v = v_1, v_2, \dots v_m)$ est basé la
+création de produit partiel $(u_1, u_2, u_3, \dots, u_n) X v_j$ pour
+$0 <= j <= m$  et en suite ajouter ces produits ensemble en utilisant la
+bonne base pour chacun d'eux.
+
+% Les méthodes qui vont suivre seront toutes construites sur base de ces trois
+% opérations primitives.
+
+\subsection{Arithmétique modulaire}
+
+\section{La librairie GMP}
+% Regarder comment knuth introduit TOOM.
+\subsection{Introduction}
+\subsection{Karatsuba}
+
+% TODO
+
+\subsection{La multiplication Toom-3}
+
+\subsubsection{D'où ça vient}
+
+\subsubsection{Explication}
+
+Toom-3 est un algorithme utilisé pour  la multiplication de deux très grands
+entiers. Pour se faire chaque opérande est divisé en 3 partie de taille égale
+afin d'être traité comme le coefficient de deux polynomes.\cite{gmplib2014}
+
+    $$X(t) = x_2 t^2 + x_1 t + x_0$$
+    $$Y(t) = y_2 t^2 + y_1 t + y_0$$
+
+Le résultat de la multiplication aura donc la forme suivante
+
+    $$W(t) = X(t) Y(t) =  w_4 t^4 + w_3 t^3 + w_2 t^2 + w_1 t + w_0$$
+
+L'approche \emph{naive} de résoudre \emph{X(t) * Y(t)} pourrait être utilisé
+mais celle-ci n'apporte aucun avantage en ce qui concerne la complexitée de
+l'algorithme par apport à une multiplication classique.\cite{gmplib2014}
+\newline
+Les polynomes de degrée \emph{d} sont défini par \emph{d + 1} points. Cette
+propriété est utilisé par l'algorithme pour réduire le nombre d'opération, en
+évaluant le polynome en 0, 1, -1, -2, $\infty$ ce qui enlève des multiplications
+à l'opérations $X(t) Y(t)$\cite{wikitoom3}
+
+    $$X(0) = x_0 + x_1(0) + x_2(0)^2 = x_0$$
+    $$X(1) = x_0 + x_1(1) + x_2(1)^2 = x_0 + x_1 + x_2$$
+    $$X(-1) = x_0 + x_1(-1) + x_2(-1)^2 = x_0 - x_1 + x_2$$
+    $$X(2) = x_0 + x_1(2) + x_2(2)^2 = x_0 - 2 * x_1 + 4 * x_2$$
+    $$X(\infty) = x_2$$
+
+\begin{pmatrix}
+  W(0) \\
+  W(1) \\
+  W(-1) \\
+  W(2) \\
+  W(\infty) \\
+\end{pmatrix}
+ =
+\begin{pmatrix}
+  1 & 0 & 0 & 0 & 0 \\
+  1 & 1 & 1 & 1 & 1 \\
+  1 &-1 & 1 &-1 & 1 \\
+  1 &-2 & 4 &-8 &16 \\
+  0 & 0 & 0 & 0 & 1 \\
+\end{pmatrix}
+\begin{pmatrix}
+  W_4 \\
+  W_3 \\
+  W_2 \\
+  W_1 \\
+  W_0 \\
+\end{pmatrix}
+
+\newline
+
+\begin{pmatrix}
+  W_4 \\
+  W_3 \\
+  W_2 \\
+  W_1 \\
+  W_0 \\
+ \end{pmatrix}
+=
+\begin{pmatrix}
+  1 & 0 & 0 & 0 & 0 \\
+  1 & 1 & 1 & 1 & 1 \\
+  1 &-1 & 1 &-1 & 1 \\
+  1 &-2 & 4 &-8 &16 \\
+  0 & 0 & 0 & 0 & 1 \\
+\end{pmatrix}^{-1}
+\begin{pmatrix}
+  W(0) \\
+  W(1) \\
+  W(-1) \\
+  W(2) \\
+  W(\infty) \\
+\end{pmatrix}
+=
+\begin{pmatrix}
+  1 & 0 & 0 & 0 & 0 \\
+  1 & 1 & 1 & 1 & 1 \\
+  1 &-1 & 1 &-1 & 1 \\
+  1 &-2 & 4 &-8 &16 \\
+  0 & 0 & 0 & 0 & 1 \\
+\end{pmatrix}^{-1}
+\begin{pmatrix}
+  x_2y_2 \\
+  (4x_2 + 2x_1 + x_0)(4y_2+ 2y_1 + y_0)\\
+  (x_2 - x_1 + x_0)(y_2 - y_1 + y_0)\\
+  (x_2 + x_1 + x_0)(y_2 + y_1 + y_0)\\
+  x_0y_0\\
+\end{pmatrix}
+
+
+
+\footnotesize
+\bibliographystyle{plain}
+\bibliography{bibliography}
+
+\end{document}
