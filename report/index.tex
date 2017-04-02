@@ -5,14 +5,16 @@
 \usepackage{url}
 
 \title{Manipulations de grands entiers: arithmétique multiprécision}
-\author{Thomas Perale^{1}$\\
+\author{Thomas Perale\\
     \mbox{}\\\\
-    $^1$Université Libre de Bruxelles, Département d'Informatique\\
-    tperale@ulb.ac.be}
+    Université Libre de Bruxelles, Département d'Informatique\\
+    tperale@ulb.ac.be\\
+}
 
 \setlength{\parskip}{0.5em}
 
 \begin{document}
+
 \maketitle
 
 \begin{abstract}
@@ -57,7 +59,7 @@ pour résoudre un calcul à l'aide de la méthode \emph{calcul écrit} sur papie
 \subsubsection{Algorithme de multiplication classique}
 
 L'algorithme classique de la multiplation pour deux entiers $u X v$ avec
-$u = (u_1, u_2, \dots u_n)$ et $v = v_1, v_2, \dots v_m)$ est basé la
+$u = (u_1, u_2, \dots u_n)$ et $v = (v_1, v_2, \dots v_m)$ est basé la
 création de produit partiel $(u_1, u_2, u_3, \dots, u_n) X v_j$ pour
 $0 <= j <= m$  et en suite ajouter ces produits ensemble en utilisant la
 bonne base pour chacun d'eux.
@@ -66,6 +68,39 @@ bonne base pour chacun d'eux.
 % opérations primitives.
 
 \subsection{Arithmétique modulaire}
+
+Il existe une autre manière existe de faire des opérations sur des grands nombres
+en utilisant l'arithmétique modulaire qui consiste à ne pas travailler sur les
+nombres eux-même mais sur les restes de leur division\cite{wikiamodulaire}.\\
+
+Si on utilise plusieurs \emph{moduli} $(m_1, m_2, \dots m_r)$ qui sont premier
+entre eux on peut facilement calculer
+
+  $$u_1 = u \mod m_1$$
+  $$u_2 = u \mod m_2$$
+  $$\dots$$
+  $$u_r = u \mod m_r$$
+
+Et on peut retrouver $u$ à partir de $u_1, u_2, \dots, u_r$, ce qui
+est une conséquence du \emph{théorème du reste chinois}.\\
+
+Dés lors on peut représenter les opérations de la manière suivante.
+
+  $$(u_1, \dots, u_r) + (v_1, \dots, v_r) = ((u_1 + v_1) \mod m_1, \dots, (u_r + v_r) \mod m_r),$$
+  $$(u_1, \dots, u_r) - (v_1, \dots, v_r) = ((u_1 - v_1) \mod m_1, \dots, (u_r - v_r) \mod m_r),$$
+  $$(u_1, \dots, u_r) X (v_1, \dots, v_r) = ((u_1 X v_1) \mod m_1, \dots, (u_r X v_r) \mod m_r),$$
+
+Les désavantages sont qu'une représentation modulaire rend difficile de
+déterminer si un nombre est positif ou négatif ou de savoir si $(u_1, \dots, u_r)$
+est plus grand que $(v_1, \dots, v_r)$.
+
+\subsubsection{Théorème du reste chinois}
+
+\subsubsection{Quand l'utiliser}
+
+L'arithmétique modulaire offre réellement des avantages lorsqu'il s'agit de faire
+des multiplications sur des grands nombres combiné avec des additions ou
+soustractions, mais pas lorsqu'il faut diviser ou comparer.
 
 \section{La librairie GMP}
 % Regarder comment knuth introduit TOOM.
@@ -91,7 +126,7 @@ Le résultat de la multiplication aura donc la forme suivante
 
     $$W(t) = X(t) Y(t) =  w_4 t^4 + w_3 t^3 + w_2 t^2 + w_1 t + w_0$$
 
-L'approche \emph{naive} de résoudre \emph{X(t) * Y(t)} pourrait être utilisé
+L'approche \emph{naive} de résoudre \emph{X (t) * Y (t)} pourrait être utilisé
 mais celle-ci n'apporte aucun avantage en ce qui concerne la complexitée de
 l'algorithme par apport à une multiplication classique.\cite{gmplib2014}
 \newline
@@ -100,18 +135,18 @@ propriété est utilisé par l'algorithme pour réduire le nombre d'opération, 
 évaluant le polynome en 0, 1, -1, -2, $\infty$ ce qui enlève des multiplications
 à l'opérations $X(t) Y(t)$\cite{wikitoom3}
 
-    $$X(0) = x_0 + x_1(0) + x_2(0)^2 = x_0$$
-    $$X(1) = x_0 + x_1(1) + x_2(1)^2 = x_0 + x_1 + x_2$$
-    $$X(-1) = x_0 + x_1(-1) + x_2(-1)^2 = x_0 - x_1 + x_2$$
-    $$X(2) = x_0 + x_1(2) + x_2(2)^2 = x_0 - 2 * x_1 + 4 * x_2$$
+    $$X (0) = x_{0} + x_{1} (0) + x_2 {(0)}^{2} = x_{0}$$
+    $$X(1) = x_0 + x_1(1) + x_2{(1)}^2 = x_0 + x_1 + x_2$$
+    $$X(-1) = x_0 + x_1(-1) + x_2{(-1)}^2 = x_0 - x_1 + x_2$$
+    $$X(2) = x_0 + x_1(2) + x_2{(2)}^2 = x_0 - 2 * x_1 + 4 * x_2$$
     $$X(\infty) = x_2$$
 
 \begin{pmatrix}
-  W(0) \\
-  W(1) \\
-  W(-1) \\
-  W(2) \\
-  W(\infty) \\
+  W (0) \\
+  W (1) \\
+  W (-1) \\
+  W (2) \\
+  W (\infty) \\
 \end{pmatrix}
  =
 \begin{pmatrix}
@@ -147,11 +182,11 @@ propriété est utilisé par l'algorithme pour réduire le nombre d'opération, 
   0 & 0 & 0 & 0 & 1 \\
 \end{pmatrix}^{-1}
 \begin{pmatrix}
-  W(0) \\
-  W(1) \\
-  W(-1) \\
-  W(2) \\
-  W(\infty) \\
+  W (0) \\
+  W (1) \\
+  W (-1) \\
+  W (2) \\
+  W (\infty) \\
 \end{pmatrix}
 =
 \begin{pmatrix}
@@ -163,9 +198,9 @@ propriété est utilisé par l'algorithme pour réduire le nombre d'opération, 
 \end{pmatrix}^{-1}
 \begin{pmatrix}
   x_2y_2 \\
-  (4x_2 + 2x_1 + x_0)(4y_2+ 2y_1 + y_0)\\
-  (x_2 - x_1 + x_0)(y_2 - y_1 + y_0)\\
-  (x_2 + x_1 + x_0)(y_2 + y_1 + y_0)\\
+  (4x_2 + 2x_1 + x_0) (4y_2+ 2y_1 + y_0)\\
+  (x_2 - x_1 + x_0) (y_2 - y_1 + y_0)\\
+  (x_2 + x_1 + x_0) (y_2 + y_1 + y_0)\\
   x_0y_0\\
 \end{pmatrix}
 
