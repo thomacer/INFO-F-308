@@ -102,12 +102,33 @@ L'arithmétique modulaire offre réellement des avantages lorsqu'il s'agit de fa
 des multiplications sur des grands nombres combiné avec des additions ou
 soustractions, mais pas lorsqu'il faut diviser ou comparer.
 
+\subsection{Diminuer la complexité des algorithmes}
+
+Les méthodes précédentes présentait des algorithmes qui avaient besoin de cnm operations pour multiplier un nombre de taille
+$m$ par un nombre de taille $n$ (c un nombre constant d'opération). Cette section aborde rapidement les méthodes pour faire
+une multiplication en moins d'opération. \\
+
+Pour multiplier deux nombres $u = (u_{2n-1} \dots u_1 u_0)$ et $u = (v_{2n-1} \dots v_1 v_0)$ de la même taille, qu'on peut
+écrire sous la forme
+
+  $$u = 2^{n} U_1 + U_0$$
+  $$v = 2^{n} V_1 + V_0$$
+
+$U_1$ étant la moitiée la plus grande de $u$ (identique pour $V_1$ avec v) et $U_0$ la moitiée la plus petite (identique pour
+$V_0$ avec $v$). On peut écrire
+
+  $$uv = (2^{2n} + 2^n) U_1 V_1 + 2^n (U_1 - U_0) (V_0 - V_1) + (2^n + 1) U_0 V_0$$
+
+Cette opération réduit un problème de complexité quadratique à 3 multiplications avec des \emph{shifts} et des additions. Il
+s'agit de l'algorithme de \emph{karatsuba} sont implémentation sera abordé plus tard.\\
+
+Même si cette méthode peut être utilisé sur les machines pour executer une multiplication plus rapidement qu'avec la méthode
+traditionelle, son vrai avantage est qu'on peut l'utiliser pour définir de manière récursive un algorithme de multiplication.
+
 \section{La librairie GMP}
 % Regarder comment knuth introduit TOOM.
 \subsection{Introduction}
 \subsection{Karatsuba}
-
-% TODO
 
 \subsection{La multiplication Toom-3}
 
