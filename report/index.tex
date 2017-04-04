@@ -94,7 +94,7 @@ Les désavantages sont qu'une représentation modulaire rend difficile de
 déterminer si un nombre est positif ou négatif ou de savoir si $(u_1, \dots, u_r)$
 est plus grand que $(v_1, \dots, v_r)$.
 
-\subsubsection{Théorème du reste chinois}
+% \subsubsection{Théorème du reste chinois}
 
 \subsubsection{Quand l'utiliser}
 
@@ -192,6 +192,7 @@ propriété est utilisé par l'algorithme pour réduire le nombre d'opération, 
     $$X(2) = x_0 + x_1(2) + x_2{(2)}^2 = x_0 - 2 * x_1 + 4 * x_2$$
     $$X(\infty) = x_2$$
 
+$$
 \begin{pmatrix}
   W (0) \\
   W (1) \\
@@ -214,9 +215,9 @@ propriété est utilisé par l'algorithme pour réduire le nombre d'opération, 
   W_1 \\
   W_0 \\
 \end{pmatrix}
+$$
 
-\newline
-
+$$
 \begin{pmatrix}
   W_4 \\
   W_3 \\
@@ -239,6 +240,9 @@ propriété est utilisé par l'algorithme pour réduire le nombre d'opération, 
   W (2) \\
   W (\infty) \\
 \end{pmatrix}
+$$
+
+$$
 =
 \begin{pmatrix}
   1 & 0 & 0 & 0 & 0 \\
@@ -254,13 +258,7 @@ propriété est utilisé par l'algorithme pour réduire le nombre d'opération, 
   (x_2 + x_1 + x_0) (y_2 + y_1 + y_0)\\
   x_0y_0\\
 \end{pmatrix}
-
-
-
-\footnotesize
-\bibliographystyle{plain}
-\bibliography{bibliography}
-
+$$
 
 \subsection{Les autres Toom}
 
@@ -301,3 +299,7 @@ l'algorithme de \emph{Karatsuba} plutôt que la simple multiplication
 à partir de $10^{10}$\cite{gmplibkaratsuba}.
 
 \end{document}
+
+\footnotesize
+\bibliographystyle{plain}
+\bibliography{bibliography}
