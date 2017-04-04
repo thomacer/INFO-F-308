@@ -26,10 +26,10 @@
 L'arithmétique multiprécision offre des méthodes pour faire des opérations sur
 des nombres d'une taille arbitraire.
 Les algorithmes de multiprécision sont particulièrement utiles lorsqu'ils sont
-executé pour faire des opérations sur un ordinateur.
+executés pour faire des opérations sur un ordinateur.
 Le problème est relativement trivial pour l'addition et la soustraction car
-la taille du résultat d'une opérations de deux entiers de taille \emph{n} est
-toujours de \emph{n} avec un report éventuelle.
+la taille du résultat d'une opération de deux entiers de taille \emph{n} est
+toujours de \emph{n} avec un report éventuel.
 L'arithmétique multiprécision prend tout son sens lors de la multiplication,
 car la multiplication d'un entier de taille \emph{m} par un entier de taille
 \emph{n} donne une réponse de taille \emph{(m + n)} en utilisant des
@@ -39,12 +39,12 @@ algorithmes classiques\cite{knuth1997aocp}.
 
 \subsection{Méthode classique}
 
-Les méthodes classique, sont décrites comme l'ensemble des méthodes primitives
-d'un ordinateur\cite{knuth1997aocp}, c'est à dire:
+Les méthodes classiques sont décrites comme l'ensemble des méthodes primitives
+d'un ordinateur\cite{knuth1997aocp}, c'est-à-dire:
 
 \begin{itemize}
     \item L'addition ou soustraction de deux entiers de taille (n) qui donne
-        un résultat de la même taille avec un report éventuelle.
+        un résultat de la même taille avec un report éventuel.
     \item La multiplication d'un entier de taille (n) avec un autre de taille
         (m) qui donne un résultat de taille (n + m).
     \item La division d'un entier d'une taille (m) par un autre d'une taille
@@ -52,77 +52,79 @@ d'un ordinateur\cite{knuth1997aocp}, c'est à dire:
         taille (m).
 \end{itemize}
 
-Les algorithmes des méthodes primitives sont identiques à celles qu'on effectue
+Les algorithmes des méthodes primitives sont identiques à ceux qu'on effectue
 pour résoudre un calcul à l'aide de la méthode \emph{calcul écrit} sur papier
 \cite{knuth1997aocp}.
 
 \subsubsection{Algorithme de multiplication classique}
 
-L'algorithme classique de la multiplation pour deux entiers $u X v$ avec
-$u = (u_1, u_2, \dots u_n)$ et $v = (v_1, v_2, \dots v_m)$ est basé la
+L'algorithme classique de la multiplication pour deux entiers $u x v$ avec
+$u = (u_1, u_2, \dots u_n)$ et $v = (v_1, v_2, \dots v_m)$ est basé sur la
 création de produit partiel $(u_1, u_2, u_3, \dots, u_n) X v_j$ pour
-$0 <= j <= m$  et en suite ajouter ces produits ensemble en utilisant la
-bonne base pour chacun d'eux.
+$0 <= j <= m$  et ensuite additionner les bonnes bases de ces opérandes.
 
 % Les méthodes qui vont suivre seront toutes construites sur base de ces trois
 % opérations primitives.
 
 \subsection{Arithmétique modulaire}
 
-Il existe une autre manière existe de faire des opérations sur des grands nombres
+Il existe une autre manière de faire des opérations sur des grands nombres
 en utilisant l'arithmétique modulaire qui consiste à ne pas travailler sur les
 nombres eux-même mais sur les restes de leur division\cite{wikiamodulaire}.\\
 
-Si on utilise plusieurs \emph{moduli} $(m_1, m_2, \dots m_r)$ qui sont premier
-entre eux on peut facilement calculer
+Si on utilise plusieurs \emph{modulis} $(m_1, m_2, \dots m_r)$ qui sont
+premiers entre eux, on peut facilement calculer
 
   $$u_1 = u \mod m_1$$
   $$u_2 = u \mod m_2$$
   $$\dots$$
   $$u_r = u \mod m_r$$
 
-Et on peut retrouver $u$ à partir de $u_1, u_2, \dots, u_r$, ce qui
+Et on retrouver $u$ à partir de $u_1, u_2, \dots, u_r$, ce qui
 est une conséquence du \emph{théorème du reste chinois}.\\
 
-Dés lors on peut représenter les opérations de la manière suivante.
+Dès lors, on peut représenter les opérations de la manière suivante.
 
   $$(u_1, \dots, u_r) + (v_1, \dots, v_r) = ((u_1 + v_1) \mod m_1, \dots, (u_r + v_r) \mod m_r),$$
   $$(u_1, \dots, u_r) - (v_1, \dots, v_r) = ((u_1 - v_1) \mod m_1, \dots, (u_r - v_r) \mod m_r),$$
   $$(u_1, \dots, u_r) X (v_1, \dots, v_r) = ((u_1 X v_1) \mod m_1, \dots, (u_r X v_r) \mod m_r),$$
 
 Les désavantages sont qu'une représentation modulaire rend difficile de
-déterminer si un nombre est positif ou négatif ou de savoir si $(u_1, \dots, u_r)$
-est plus grand que $(v_1, \dots, v_r)$.
+déterminer si un nombre est positif ou négatif ou de savoir si
+$(u_1, \dots, u_r)$ est plus grand que $(v_1, \dots, v_r)$.
 
 % \subsubsection{Théorème du reste chinois}
 
 \subsubsection{Quand l'utiliser}
 
 L'arithmétique modulaire offre réellement des avantages lorsqu'il s'agit de faire
-des multiplications sur des grands nombres combiné avec des additions ou
+des multiplications sur des grands nombres combinés avec des additions ou
 soustractions, mais pas lorsqu'il faut diviser ou comparer.
 
 \subsection{Diminuer la complexité des algorithmes}
 
-Les méthodes précédentes présentait des algorithmes qui avaient besoin de cnm operations pour multiplier un nombre de taille
-$m$ par un nombre de taille $n$ (c un nombre constant d'opération). Cette section aborde rapidement les méthodes pour faire
-une multiplication en moins d'opération. \\
-
-Pour multiplier deux nombres $u = (u_{2n-1} \dots u_1 u_0)$ et $v = (v_{2n-1} \dots v_1 v_0)$ de la même taille, qu'on peut
-écrire sous la forme
+Les méthodes précédentes présentaient des algorithmes qui avaient besoin de
+$cnm$ opérations pour multiplier un nombre de taille $m$ par un nombre de
+taille $n$ (c un nombre constant d'opération). Cette section aborde rapidement
+les méthodes pour faire une multiplication en moins d'opération.
+\newline
+Pour multiplier deux nombres $u = (u_{2n-1} \dots u_1 u_0)$ et
+$v = (v_{2n-1} \dots v_1 v_0)$ de la même taille, qu'on peut écrire sous la
+forme
 
   $$u = 2^{n} U_1 + U_0$$
   $$v = 2^{n} V_1 + V_0$$
 
-$U_1$ étant la moitiée la plus grande de $u$ (identique pour $V_1$ avec v) et $U_0$ la moitiée la plus petite (identique pour
-$V_0$ avec $v$). On peut écrire
+$U_1$ étant la moitiée la plus grande de $u$ (identique pour $V_1$ avec v) et
+$U_0$ la moitiée la plus petite (identique pour $V_0$ avec $v$). On peut écrire
 
   $$uv = (2^{2n} + 2^n) U_1 V_1 + 2^n (U_1 - U_0) (V_0 - V_1) + (2^n + 1) U_0 V_0$$
 
-Cette opération réduit un problème de complexité quadratique à 3 multiplications avec des \emph{shifts} et des additions. Il
-s'agit de l'algorithme de \emph{karatsuba} sont implémentation sera abordé plus tard.\\
-
-Même si cette méthode peut être utilisé sur les machines pour executer une
+Cette opération réduit un problème de complexité quadratique à 3 multiplications
+dont des \emph{shifts} et des additions. Il s'agit de l'algorithme de
+\emph{karatsuba} son implémentation sera abordée plus tard.
+\newline
+Même si cette méthode peut être utilisée sur les machines pour exécuter une
 multiplication plus rapidement qu'avec la méthode traditionelle, son vrai
 avantage est qu'on peut l'utiliser pour définir de manière récursive un
 algorithme de multiplication.
@@ -139,15 +141,15 @@ librairie libre permettant d'effectuer de l'arithmétique multiprécision sur
 des entiers, comme sur des nombres rationnels. Elle a la particularité de ne pas
 avoir de limite de précision, si ce n'est celle de la mémoire.
 \newline
-Cette librairie est souvent utilisé pour des applications liées à la cryptographie
-\cite{wikigmp}.
+Cette librairie est souvent utilisée pour des applications liées à la
+cryptographie \cite{wikigmp}.
 
 \subsection{Karatsuba ou Toom-2}
 
-Comme expliquer dans la section précedente \emph{l'algorithme de Karatsuba} sert
+Comme expliqué dans la section précedente, \emph{l'algorithme de Karatsuba} sert
 à résoudre la multiplication d'un nombre $u = (u_{2n-1} \dots u_1 u_0)$ par un
-nombre $v = (v_{2n-1} \dots v_1 v_0)$. Afin d'y arriver les nombres $u$ et $v$
-sont divisé en deux partie de taille égale
+nombre $v = (v_{2n-1} \dots v_1 v_0)$. Afin d'y arriver, les nombres $u$ et $v$
+sont divisés en deux parties de taille égale
 
   $$u = 2^{n} U_1 + U_0$$
   $$v = 2^{n} V_1 + V_0$$
@@ -156,14 +158,14 @@ Ce qui permet de résoudre la multiplication de la façon suivante
 
   $$uv = (2^{2n} + 2^n) U_1 V_1 + 2^n (U_1 - U_0) (V_0 - V_1) + (2^n + 1) U_0 V_0$$
 
-Pour donnee un algorithme de complexité $\mathcal{O}(N^{\log{3}/\log{2}})$ qui
-correspond à $3$ multiplications sur des nombre $\frac{1}{2}$ plus petit que
+Pour donner un algorithme de complexité $\mathcal{O}(N^{\log{3}/\log{2}})$ qui
+correspond à $3$ multiplications sur des nombres $\frac{1}{2}$ plus petits que
 les originaux\cite{gmplibkaratsuba}.
 
 \subsection{La multiplication Toom-3}
 
 Toom-3 est un algorithme utilisé pour la multiplication de deux très grands
-entiers. Pour se faire chaque opérande est divisé en 3 (là où karatsuba
+entiers. Pour se faire, chaque opérande est divisé en 3 (là où karatsuba
 divisait en 2) partie de taille égale afin d'être traité comme le
 coefficient de deux polynomes\cite{gmplib2014}.
 
@@ -174,14 +176,14 @@ Le résultat de la multiplication aura donc la forme suivante
 
     $$W(t) = X(t) Y(t) =  w_4 t^4 + w_3 t^3 + w_2 t^2 + w_1 t + w_0$$
 
-L'approche \emph{naive} de résoudre \emph{X (t) * Y (t)} pourrait être utilisé
-mais celle-ci n'apporte aucun avantage en ce qui concerne la complexitée de
-l'algorithme par apport à une multiplication classique.\cite{gmplib2014}
+L'approche \emph{naive} de résoudre \emph{X (t) * Y (t)} pourrait être utilisée
+mais celle-ci n'apporte aucun avantage en ce qui concerne la complexité de
+l'algorithme par rapport à une multiplication classique.\cite{gmplib2014}
 \newline
-Les polynomes de degrée \emph{d} sont défini par \emph{d + 1} points. Cette
-propriété est utilisé par l'algorithme pour réduire le nombre d'opération, en
-évaluant le polynome en 0, 1, -1, -2, $\infty$ ce qui enlève des multiplications
-à l'opérations $X(t) Y(t)$\cite{wikitoom3}
+Les polynomes de degré \emph{d} sont définis par \emph{d + 1} points. Cette
+propriété est utilisée par l'algorithme pour réduire le nombre d'opération, en
+évaluant le polynome en $0, 1, -1, -2, \infty$ ce qui enlève des multiplications
+à l'opération $X(t) Y(t)$\cite{wikitoom3}
 
     $$X (0) = x_{0} + x_{1} (0) + x_2 {(0)}^{2} = x_{0}$$
     $$X(1) = x_0 + x_1(1) + x_2{(1)}^2 = x_0 + x_1 + x_2$$
@@ -259,26 +261,26 @@ $$
 
 \subsection{Les autres Toom}
 
-Les versions supérieurs reprennent le même principe mais en divisant
+Les versions supérieures reprennent le même principe mais en divisant
 en plus de partie de taille égale.
 
 \subsection{Quel algorithme utiliser}
 
 Les sections précédentes nous ont montré qu'on pouvait récursivement
-infiniment diminuer la complexitée des algorithmes de multiplications.
+infiniment diminuer la complexité des algorithmes de multiplication.
 Il est légitime de se demander pourquoi ne pas utiliser l'algorithme
 qui a la complexité la plus petite et quel algorithme utiliser dans
-quel situation.
+quelle situation.
 \newline
 La réponse à la première question est que ces algorithmes deviennent
-plus rapide à partir du moment ou les nombres multiplié sont
-suffisament large. Le nombre d'opération ayant un cout constant
-étant très élevé pour résoudre l'algorithme ceux-ci sont plus lent
-que des algorithmes de multiplications basique (en $\mathcal{O}(n^2)$)
+plus rapides à partir du moment ou les nombres multipliés sont
+suffisamment large. Le nombre d'opération ayant un coût constant
+très élevé pour résoudre l'algorithme, ceux-ci sont plus lents
+que des algorithmes de multiplication basique (en $\mathcal{O}(n^2)$)
 \newline
 Pour ce qui est de choisir un algorithme adéquat à la multiplication,
-la librairie GMP a choisit d'implémenter 7 algorithme de multiplication
-qui sont utiliser au fûr et à mesure que la taille de l'opération
+la librairie GMP a choisi d'implémenter 7 algorithmes de multiplication
+qui sont utilisés au fûr et à mesure que la taille de l'opération
 augmente\cite{gmplibmultiplication}.
 
 \begin{itemize}
@@ -292,9 +294,9 @@ augmente\cite{gmplibmultiplication}.
 \end{itemize}
 
 La librairie implémente directement des \emph{seuils} pour lesquels
-on passe d'une opération à l'autre. C'est seuils varient selon
-beaucoup de paramètre dont l'architecture. Mais en guise d'exemple
-pour multiplier $NxN$ on peut dans certains cas commencer à utiliser
+on passe d'une opération à l'autre. Ces seuils varient selon
+beaucoup de paramètres dont l'architecture. Mais, en guise d'exemple
+pour multiplier $N*N$, on peut, dans certains cas, commencer à utiliser
 l'algorithme de \emph{Karatsuba} plutôt que la simple multiplication
 à partir de $10^{10}$\cite{gmplibkaratsuba}.
 
