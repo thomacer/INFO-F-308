@@ -162,13 +162,10 @@ les originaux\cite{gmplibkaratsuba}.
 
 \subsection{La multiplication Toom-3}
 
-\subsubsection{D'où ça vient}
-
-\subsubsection{Explication}
-
-Toom-3 est un algorithme utilisé pour  la multiplication de deux très grands
-entiers. Pour se faire chaque opérande est divisé en 3 partie de taille égale
-afin d'être traité comme le coefficient de deux polynomes.\cite{gmplib2014}
+Toom-3 est un algorithme utilisé pour la multiplication de deux très grands
+entiers. Pour se faire chaque opérande est divisé en 3 (là où karatsuba
+divisait en 2) partie de taille égale afin d'être traité comme le
+coefficient de deux polynomes\cite{gmplib2014}.
 
     $$X(t) = x_2 t^2 + x_1 t + x_0$$
     $$Y(t) = y_2 t^2 + y_1 t + y_0$$
@@ -261,6 +258,9 @@ $$
 $$
 
 \subsection{Les autres Toom}
+
+Les versions supérieurs reprennent le même principe mais en divisant
+en plus de partie de taille égale.
 
 \subsection{Quel algorithme utiliser}
 
