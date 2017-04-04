@@ -108,7 +108,7 @@ Les méthodes précédentes présentait des algorithmes qui avaient besoin de cn
 $m$ par un nombre de taille $n$ (c un nombre constant d'opération). Cette section aborde rapidement les méthodes pour faire
 une multiplication en moins d'opération. \\
 
-Pour multiplier deux nombres $u = (u_{2n-1} \dots u_1 u_0)$ et $u = (v_{2n-1} \dots v_1 v_0)$ de la même taille, qu'on peut
+Pour multiplier deux nombres $u = (u_{2n-1} \dots u_1 u_0)$ et $v = (v_{2n-1} \dots v_1 v_0)$ de la même taille, qu'on peut
 écrire sous la forme
 
   $$u = 2^{n} U_1 + U_0$$
@@ -122,13 +122,35 @@ $V_0$ avec $v$). On peut écrire
 Cette opération réduit un problème de complexité quadratique à 3 multiplications avec des \emph{shifts} et des additions. Il
 s'agit de l'algorithme de \emph{karatsuba} sont implémentation sera abordé plus tard.\\
 
-Même si cette méthode peut être utilisé sur les machines pour executer une multiplication plus rapidement qu'avec la méthode
-traditionelle, son vrai avantage est qu'on peut l'utiliser pour définir de manière récursive un algorithme de multiplication.
+Même si cette méthode peut être utilisé sur les machines pour executer une
+multiplication plus rapidement qu'avec la méthode traditionelle, son vrai
+avantage est qu'on peut l'utiliser pour définir de manière récursive un
+algorithme de multiplication.
+
+% Expliquer qu'ici on divise par 2 les nombres mais on peut faire la même si on
+% divise par 3 le nombre, etc ..
 
 \section{La librairie GMP}
 % Regarder comment knuth introduit TOOM.
 \subsection{Introduction}
-\subsection{Karatsuba}
+
+\subsection{Karatsuba ou Toom-2}
+
+Comme expliquer dans la section précedente \emph{l'algorithme de Karatsuba} sert
+à résoudre la multiplication d'un nombre $u = (u_{2n-1} \dots u_1 u_0)$ par un
+nombre $v = (v_{2n-1} \dots v_1 v_0)$. Afin d'y arriver les nombres $u$ et $v$
+sont divisé en deux partie de taille égale
+
+  $$u = 2^{n} U_1 + U_0$$
+  $$v = 2^{n} V_1 + V_0$$
+
+Ce qui permet de résoudre la multiplication de la façon suivante
+
+  $$uv = (2^{2n} + 2^n) U_1 V_1 + 2^n (U_1 - U_0) (V_0 - V_1) + (2^n + 1) U_0 V_0$$
+
+Pour donnee un algorithme de complexité $\mathcal{O}(N^{\log{3}/\log{2}})$ qui
+correspond à $3$ multiplications sur des nombre $\frac{1}{2}$ plus petit que
+les originaux\cite{gmplibkaratsuba}.
 
 \subsection{La multiplication Toom-3}
 
@@ -230,5 +252,44 @@ propriété est utilisé par l'algorithme pour réduire le nombre d'opération, 
 \footnotesize
 \bibliographystyle{plain}
 \bibliography{bibliography}
+
+
+\subsection{Les autres Toom}
+
+\subsection{Quel algorithme utiliser}
+
+Les sections précédentes nous ont montré qu'on pouvait récursivement
+infiniment diminuer la complexitée des algorithmes de multiplications.
+Il est légitime de se demander pourquoi ne pas utiliser l'algorithme
+qui a la complexité la plus petite et quel algorithme utiliser dans
+quel situation.
+\newline
+La réponse à la première question est que ces algorithmes deviennent
+plus rapide à partir du moment ou les nombres multiplié sont
+suffisament large. Le nombre d'opération ayant un cout constant
+étant très élevé pour résoudre l'algorithme ceux-ci sont plus lent
+que des algorithmes de multiplications basique (en $\mathcal{O}(n^2)$)
+\newline
+Pour ce qui est de choisir un algorithme adéquat à la multiplication,
+la librairie GMP a choisit d'implémenter 7 algorithme de multiplication
+qui sont utiliser au fûr et à mesure que la taille de l'opération
+augmente\cite{gmplibmultiplication}.
+
+\begin{itemize}
+  \item La multiplication basique
+  \item Karatsuba
+  \item Toom-3
+  \item Toom-4
+  \item Toom-6.5
+  \item Toom-8.5
+  \item FFT
+\end{itemize}
+
+La librairie implémente directement des \emph{seuils} pour lesquels
+on passe d'une opération à l'autre. C'est seuils varient selon
+beaucoup de paramètre dont l'architecture. Mais en guise d'exemple
+pour multiplier $NxN$ on peut dans certains cas commencer à utiliser
+l'algorithme de \emph{Karatsuba} plutôt que la simple multiplication
+à partir de $10^{10}$\cite{gmplibkaratsuba}.
 
 \end{document}
