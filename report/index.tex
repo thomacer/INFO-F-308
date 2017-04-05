@@ -35,7 +35,7 @@ car la multiplication d'un entier de taille \emph{m} par un entier de taille
 \emph{n} donne une réponse de taille \emph{(m + n)} en utilisant des
 algorithmes classiques\cite{knuth1997aocp}.
 
-\section{État de l'art}
+\section{État de l'art des méthodes de calcul}
 
 \subsection{Méthode classique}
 
@@ -85,9 +85,24 @@ est une conséquence du \emph{théorème du reste chinois}.\\
 
 Dès lors, on peut représenter les opérations de la manière suivante.
 
-  $$(u_1, \dots, u_r) + (v_1, \dots, v_r) = ((u_1 + v_1) \mod m_1, \dots, (u_r + v_r) \mod m_r),$$
-  $$(u_1, \dots, u_r) - (v_1, \dots, v_r) = ((u_1 - v_1) \mod m_1, \dots, (u_r - v_r) \mod m_r),$$
-  $$(u_1, \dots, u_r) X (v_1, \dots, v_r) = ((u_1 X v_1) \mod m_1, \dots, (u_r X v_r) \mod m_r),$$
+\begin{equation}
+  \begin{split}
+    (u_1, \dots, u_r) + (v_1, \dots, v_r) \\
+     \Rightarrow ((u_1 + v_1) \mod m_1, \dots, (u_r + v_r) \mod m_r)
+  \end{split}
+\end{equation}
+\begin{equation}
+  \begin{split}
+    (u_1, \dots, u_r) - (v_1, \dots, v_r) \\
+      \Rightarrow ((u_1 - v_1) \mod m_1, \dots, (u_r - v_r) \mod m_r)
+  \end{split}
+\end{equation}
+\begin{equation}
+  \begin{split}
+    (u_1, \dots, u_r) X (v_1, \dots, v_r) \\
+      \Rightarrow ((u_1 X v_1) \mod m_1, \dots, (u_r X v_r) \mod m_r)
+  \end{split}
+\end{equation}
 
 Les désavantages sont qu'une représentation modulaire rend difficile de
 déterminer si un nombre est positif ou négatif ou de savoir si
@@ -142,7 +157,7 @@ des entiers, comme sur des nombres rationnels. Elle a la particularité de ne pa
 avoir de limite de précision, si ce n'est celle de la mémoire.
 \newline
 Cette librairie est souvent utilisée pour des applications liées à la
-cryptographie \cite{wikigmp}.
+cryptographie\cite{wikigmp}.
 
 \subsection{Karatsuba ou Toom-2}
 
