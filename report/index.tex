@@ -34,16 +34,16 @@
 \section{Introduction}
 
 L'arithmétique multiprécision offre des méthodes pour faire des opérations sur
-des nombres d'une taille arbitraire.
-Les algorithmes de multiprécision sont particulièrement utiles lorsqu'ils sont
-executés pour faire des opérations sur un ordinateur.
-Le problème est relativement trivial pour l'addition et la soustraction car
-la taille du résultat d'une opération de deux entiers de taille \emph{n} est
-toujours de \emph{n} avec un report éventuel.
-L'arithmétique multiprécision prend tout son sens lors de la multiplication,
-car la multiplication d'un entier de taille \emph{m} par un entier de taille
-\emph{n} donne une réponse de taille \emph{(m + n)} en utilisant des
-algorithmes classiques\cite{knuth1997aocp}.
+des nombres d'une taille arbitraire. Pour résoudre des problèmes qui ont
+besoins d'utiliser des techniques d'arithmétique multiprécision des librairies
+existent. Par exemple \emph{GMP} et \emph{GNU MPFR} qui sont les plus
+répendues elles implémentent toutes les deux plusieurs algorithmes pour faire
+des opérations qui sont plus ou moins efficace selon le cas et moins naturelles
+que ceux utilisé pour la simple précision.
+Je m'attarderai ici sur les différents algorithmes utilisées pour faire de
+de la multiplication multiprécision sur des entiers et me baserai ensuite sur
+la librairie \emph{GMP} pour expliquer concrètement les méthodes employés pour
+faire des opérations multiprécisions.
 
 \section{État de l'art des méthodes de calcul}
 
