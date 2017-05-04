@@ -1,8 +1,18 @@
 \documentclass[letterpaper]{article}
-\usepackage[utf8]{inputenc}
 \usepackage{natbib,alifexi}
+\usepackage[utf8]{inputenc}
 \usepackage{amsmath}
+\usepackage[tocage]{appendix}
+\usepackage[frenchb]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{placeins, latexsym, amssymb}
+\usepackage[hidelinks]{hyperref}
 \usepackage{url}
+
+% \documentclass[letterpaper]{article}
+% \usepackage[utf8]{inputenc}
+% \usepackage{natbib,alifexi}
+% \usepackage{amsmath}
 
 \title{Manipulations de grands entiers: arithmétique multiprécision}
 \author{Thomas Perale\\
@@ -315,8 +325,9 @@ pour multiplier $N*N$, on peut, dans certains cas, commencer à utiliser
 l'algorithme de \emph{Karatsuba} plutôt que la simple multiplication
 à partir de $10^{10}$\cite{gmplibkaratsuba}.
 
-\end{document}
 
 \footnotesize
-\bibliographystyle{plain}
+\bibliographystyle{apalike}
 \bibliography{bibliography}
+
+\end{document}

@@ -1,9 +1,3 @@
-# all:
-# 	pdflatex index.tex
-# 	bibtex index.aux
-# 	pdflatex index.tex
-
-
 # You want latexmk to *always* run, because make does not have all the info.
 # Also, include non-file targets in .PHONY so they are run regardless of any
 # file of the given name existing.
