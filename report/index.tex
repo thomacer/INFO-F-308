@@ -45,6 +45,70 @@ de la multiplication multiprécision sur des entiers et me baserai ensuite sur
 la librairie \emph{GMP} pour expliquer concrètement les méthodes employés pour
 faire des opérations multiprécisions.
 
+\section{Qu'est-ce que c'est l'artithmétique multiprécision}
+
+L'arthmétique multiprécision regroupe toutes les techniques utilisé dans des
+programmes pour résoudre des opérations sur des nombres de taille
+arbitraire\cite{wikimultiprecision}.
+Celle-ci s'oppose à l'arithmétique simple précision qui ne s'occupe que des
+nombres entre 8 et 64 bits selon l'architecture de l'ordinateur où est executé
+le programme, et dont les opérations sont des instructions du
+processeurs\cite{wikimultiprecision}.
+
+\section{Les opérations simple précision}
+
+Les opérations simple précision sont régulièrement implémenté comme des
+instructions processeurs ou sont émulés ce qui offre un avantage de rapidité.
+Les opérations sont les suivantes\cite{wikialu}:
+
+\begin{itemize}
+  \item L'addition.
+  \item L'addition avec report. Si l'addition dépasse la limite de
+    l'architecture, c'est indiqué dans un report.
+  \item La soustraction.
+  \item La soustraction avec report.
+  \item Incrementaion.
+  \item Decrémentation.
+  \item ET logique.
+  \item OU logique.
+  \item OU exclusif logique.
+  \item Complément à un.
+  \item Décalage à gauche ou à droite.
+  \item Rotation
+  \item Rotation avec report.
+\end{itemize}
+
+Ces opérations sont importante parce qu'elles sont à la base des algorithmes
+utilisé pour les opérations multiprécisions.
+
+\subsection{Représentation}
+
+La représentation des nombres en simple précision est totalement dépendante de
+l'architecture de l'ordinateur sur lesquels ces opérations sont executés.
+Généralement les nombres entiers sont représenté dans les architectures actuels
+sous forme d'un nombre binaire de 64 bits en complément à deux.
+
+\section{L'arithmétique multiprécision}
+
+L'arithmétique multiprécision offre des algorithmes pour les opérations moins
+évidents que ceux en simple précision mais permets de résoudre des opérations
+sur des nombres de taille arbitraire. Les représentations et les algorithmes et
+les représentations ne sont plus ici contraint par l'architecture du processeur
+ce qui permet de varier la représentation selon l'algorithme utilisé pour
+l'opération.
+
+\subsection{Représentation vectorielle}
+
+Si les nombres sont plus grand que la limite imposé par l'architecture, afin de
+faire de l'arithmétique multiprécision, les nombres peuvent être représenter
+dans une forme vectorielle. C'est à dire que le nombre est représenter dans un
+vecteur d'entier lorsqu'il y a un report celui-ci est ajouté à l'élément
+suivant du vecteur.
+
+% TODO Schéma
+
+\subsection{Représentation modulaire}
+
 \section{État de l'art des méthodes de calcul}
 
 \subsection{Méthode classique}
@@ -331,3 +395,4 @@ l'algorithme de \emph{Karatsuba} plutôt que la simple multiplication
 \bibliography{bibliography}
 
 \end{document}
+uer
