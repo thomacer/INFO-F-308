@@ -130,7 +130,26 @@ parallèlement car elle s'éffectue sur chaque module de manière indépendante.
 
 \subsubsection{Addition}
 
+L'algorithme pour résoudre une addition sous forme vectorielle est simple.
+Il se base sur l'addition en simple précision tout en ayant l'avantage de
+pouvoir faire des additions sur des nombres de taille arbitraire. \\
+
+Pour additionner un nombre en représentation vectorielle on additionne chacun
+des éléments du vecteur entre eux et on ajoute les reports éventuels à
+l'élément suivant du vecteur. \\
+
+La complexité de cet algorithme dépend du nombre d'élément dans le vecteur et
+la réponse sera un vecteur de même taille que le plus grand des opérandes
+utiliśe dans l'addition.\\
+
+J'ai parlé ici de l'addition mais le principe est le même pour la soustraction
+si les nombres sont représenté sous la forme d'un complément à deux, car il
+permet d'effectuer les opérations sur des nombres négatif de la même
+manière\cite{wikicomplementtwo}.
+
 \subsubsection{Multiplications}
+
+
 
 \subsection{Représentation modulaire}
 
