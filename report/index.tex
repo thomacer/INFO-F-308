@@ -306,19 +306,13 @@ modulaire.
 \begin{equation}
   \begin{split}
     (u_1, \dots, u_r) + (v_1, \dots, v_r) \\
-     \Rightarrow ((u_1 + v_1) \mod m_1, \dots, (u_r + v_r) \mod m_r)
+     \Rightarrow ((u_1 + v_1) \bmod m_1, \dots, (u_r + v_r) \bmod m_r)
   \end{split}
 \end{equation}
 \begin{equation}
   \begin{split}
     (u_1, \dots, u_r) - (v_1, \dots, v_r) \\
-      \Rightarrow ((u_1 - v_1) \mod m_1, \dots, (u_r - v_r) \mod m_r)
-  \end{split}
-\end{equation}
-\begin{equation}
-  \begin{split}
-    (u_1, \dots, u_r) X (v_1, \dots, v_r) \\
-      \Rightarrow ((u_1 X v_1) \mod m_1, \dots, (u_r X v_r) \mod m_r)
+      \Rightarrow ((u_1 - v_1) \bmod m_1, \dots, (u_r - v_r) \bmod m_r)
   \end{split}
 \end{equation}
 
@@ -327,6 +321,59 @@ déterminer si un nombre est positif ou négatif ou de savoir si
 $(u_1, \dots, u_r)$ est plus grand que $(v_1, \dots, v_r)$.
 
 \subsubsection{Multiplications}
+
+De la même manière pour effectuer une multiplication entre deux nombre en
+représentation modulaire
+
+\begin{equation}
+  \begin{split}
+    X = U . V \mod M
+  \end{split}
+\end{equation}
+
+On peut la calculer de la sorte
+
+\begin{equation}
+  \begin{split}
+    (u_1, \dots, u_r) X (v_1, \dots, v_r) \mod M \\
+      \Rightarrow ((u_1 X v_1) \mod m_1, \dots, (u_r X v_r) \mod m_r)
+  \end{split}
+\end{equation}
+
+\subsubsection{La réduction de montgomery}
+
+La réduction de montgomery est un algorithme qui permet d'effectuer une
+multiplication modulaire de manière efficace\cite{menezes1996crypto}.\\
+
+Soit un entier $n$ strictement positif et $R$ et $T$ des entiers tel que $R >
+n$ et $pgcd(R, n) = 1$ et $0 < T < Rn$, la réduction de montgomery est la
+méthode utilisé pour resoudre $T R^{-1} \mod n$, selon le choix de $R$ la
+réduction peut être calculer de manière efficace\cite{menezes1996crypto}.\\
+
+La forme \emph{montgomery} d'une multiplication de $u$ par $v$ est la
+suivante
+
+$$(uR \bmod N)(vR \bmod N) R' ≡ (uR)(vR) R' ≡ (u.v) R \pmod N$$
+
+Avec un entier $R'$ qui résout $RR' = 1 \pmod N$.\\
+
+La réduction de montgomery est totallement adapté pour résoudre des opérations
+en multiprécision car il permet de réduire la taille des nombres sur lesquelles
+on fait des opérations. Typiquement une implémentation de l'algorithme de
+montgomery s'assurerra que $R$ soit égale à $R = b^{x}$ ($b$ étant la base utilisé,
+c'est à dire 2 dans le cadre d'un ordinateur et $x$ un nombre pour que
+$pgcd(R, n) = 1$) pour que les opérations intermédiaire peuvent être résolue
+grace à des \emph{shifts}\cite{djguan2003montgomery}.
+
+% $$RR' - NN' = 1$$
+
+% u = 7
+% v = 15
+% N = 17
+% R = 100
+% (7.100 mod 17 = 3) and (15.100 mod 17 = 4) et 3.4 = 12
+% RR' - NN' =  8⋅100 − 47⋅17 = 1, -> R' = 8 et N' = 47
+% (uR.vR).R' mod 17 = 12*8 mod 17 = 96 mod 17 = 11
 
 \section{La librairie GMP}
 
