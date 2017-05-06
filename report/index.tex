@@ -104,45 +104,12 @@ suivant du vecteur.
 
 \subsection{Représentation modulaire}
 
-\section{État de l'art des méthodes de calcul}
+La représentation modulaire est utilisé parce qu'elle permet de ne pas
+travailler sur les nombres eux-même mais sur les restes de leur division
+\cite{wikiamodulaire}.\\
 
-\subsection{Méthode classique}
-
-Les méthodes classiques sont décrites comme l'ensemble des méthodes primitives
-d'un ordinateur\cite{knuth1997aocp}, c'est-à-dire:
-
-\begin{itemize}
-    \item L'addition ou soustraction de deux entiers de taille (n) qui donne
-        un résultat de la même taille avec un report éventuel.
-    \item La multiplication d'un entier de taille (n) avec un autre de taille
-        (m) qui donne un résultat de taille (n + m).
-    \item La division d'un entier d'une taille (m) par un autre d'une taille
-        (n) qui donne un résultat d'une taille (m) avec un reste éventuel de
-        taille (m).
-\end{itemize}
-
-Les algorithmes des méthodes primitives sont identiques à ceux qu'on effectue
-pour résoudre un calcul à l'aide de la méthode \emph{calcul écrit} sur papier
-\cite{knuth1997aocp}.
-
-\subsubsection{Algorithme de multiplication classique}
-
-L'algorithme classique de la multiplication pour deux entiers $u x v$ avec
-$u = (u_1, u_2, \dots u_n)$ et $v = (v_1, v_2, \dots v_m)$ est basé sur la
-création de produit partiel $(u_1, u_2, u_3, \dots, u_n) X v_j$ pour
-$0 <= j <= m$  et ensuite additionner les bonnes bases de ces opérandes.
-
-% Les méthodes qui vont suivre seront toutes construites sur base de ces trois
-% opérations primitives.
-
-\subsection{Arithmétique modulaire}
-
-Il existe une autre manière de faire des opérations sur des grands nombres
-en utilisant l'arithmétique modulaire qui consiste à ne pas travailler sur les
-nombres eux-même mais sur les restes de leur division\cite{wikiamodulaire}.\\
-
-Si on utilise plusieurs \emph{modulis} $(m_1, m_2, \dots m_r)$ qui sont
-premiers entre eux, on peut facilement calculer
+Si on utilise des numbres $(m_1, m_2, \dots m_r)$ premiers entre eux,
+on peut facilement calculer
 
   $$u_1 = u \mod m_1$$
   $$u_2 = u \mod m_2$$
@@ -152,7 +119,25 @@ premiers entre eux, on peut facilement calculer
 Et on retrouver $u$ à partir de $u_1, u_2, \dots, u_r$, ce qui
 est une conséquence du \emph{théorème du reste chinois}.\\
 
-Dès lors, on peut représenter les opérations de la manière suivante.
+L'arithmétique modulaire est particulièrement utile dans le domaine de la
+cryptographie de part sa capacitée de réduire des nombres premiers entre eux à
+des nombres de petite taille, où les opérations peuvent être executés
+parallèlement car elle s'éffectue sur chaque module de manière indépendante.
+
+\section{Algorithme des opérations multiprécisions}
+
+\subsection{Représentation vectorielle}
+
+\subsubsection{Addition}
+
+\subsubsection{Multiplications}
+
+\subsection{Représentation modulaire}
+
+\subsubsection{Addition}
+
+L'addition l'addition se résout de la façon suivante en représentation
+modulaire.
 
 \begin{equation}
   \begin{split}
@@ -177,13 +162,7 @@ Les désavantages sont qu'une représentation modulaire rend difficile de
 déterminer si un nombre est positif ou négatif ou de savoir si
 $(u_1, \dots, u_r)$ est plus grand que $(v_1, \dots, v_r)$.
 
-% \subsubsection{Théorème du reste chinois}
-
-\subsubsection{Quand l'utiliser}
-
-L'arithmétique modulaire offre réellement des avantages lorsqu'il s'agit de faire
-des multiplications sur des grands nombres combinés avec des additions ou
-soustractions, mais pas lorsqu'il faut diviser ou comparer.
+\subsubsection{Multiplications}
 
 \subsection{Diminuer la complexité des algorithmes}
 
