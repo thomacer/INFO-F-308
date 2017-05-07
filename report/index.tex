@@ -382,26 +382,29 @@ grace à des \emph{shifts}\cite{djguan2003montgomery}.
 
 La librairie \emph{GMP} (GNU Multiple Precision Arithmetic Library) est une
 librairie libre permettant d'effectuer de l'arithmétique multiprécision sur
-des entiers, comme sur des nombres rationnels. Elle a la particularité de ne pas
-avoir de limite de précision, si ce n'est celle de la mémoire.
+des entiers, comme sur des nombres rationnels en se focalisant sur les
+performances. La librairie choisis les algorithmes selon la taille des
+opérandes pour offrir les meilleurs performances au cas par cas, mais aussi
+optimise ses algorithmes selon l'architecture sur laquelle ces algorithmes sont
+executés.
 \newline
 Cette librairie est souvent utilisée pour des applications liées à la
 cryptographie\cite{wikigmp}.
 
-\subsection{Quel algorithme utiliser}
+\subsection{Les algorithme de multiplications}
 
 Les sections précédentes nous ont montré qu'on pouvait récursivement
 infiniment diminuer la complexité des algorithmes de multiplication.
 Il est légitime de se demander pourquoi ne pas utiliser l'algorithme
 qui a la complexité la plus petite et quel algorithme utiliser dans
-quelle situation.
-\newline
+quelle situation.\\
+
 La réponse à la première question est que ces algorithmes deviennent
 plus rapides à partir du moment ou les nombres multipliés sont
 suffisamment large. Le nombre d'opération ayant un coût constant
 très élevé pour résoudre l'algorithme, ceux-ci sont plus lents
-que des algorithmes de multiplication basique (en $\mathcal{O}(n^2)$)
-\newline
+que des algorithmes de multiplication basique (en $\mathcal{O}(n^2)$)\\
+
 Pour ce qui est de choisir un algorithme adéquat à la multiplication,
 la librairie GMP a choisi d'implémenter 7 algorithmes de multiplication
 qui sont utilisés au fûr et à mesure que la taille de l'opération
@@ -417,12 +420,31 @@ augmente\cite{gmplibmultiplication}.
   \item FFT
 \end{itemize}
 
+Les algorithmes de \emph{multiplication basique}, de \emph{karatsuba} et de
+\emph{Toom-3} ont déjà été abordé et c'est inutile d'en reparler car leur
+implémentation est la même à l'exception qu'ils sont spécialement optimisé pour
+chaque processeur avec des instruction assembleurs particulières.\\
+
+Par contre \emph{Toom-4}, \emph{Toom-6.5}, \emph{Toom-8.5} n'ont pas été abordé
+simplement car le fonctionnement reste identique. En effet \emph{Toom-4} ne
+fait que diviser le nombre en 4 coefficient là où \emph{Toom-3} le divisait en
+3 coefficient\cite{gmplibtoom4} et évalue $X(t)$ et $Y(t)$ en 7 points. Qu'en
+aux algorithmes \emph{Toom-x.5} ça signifie qu'on évalue $X(t)$ et $Y(t)$ en
+$2n$ points mais le foncitonnement est identique\cite{gmplibtoomhalf}.\\
+
 La librairie implémente directement des \emph{seuils} pour lesquels
-on passe d'une opération à l'autre. Ces seuils varient selon
-beaucoup de paramètres dont l'architecture. Mais, en guise d'exemple
-pour multiplier $N*N$, on peut, dans certains cas, commencer à utiliser
-l'algorithme de \emph{Karatsuba} plutôt que la simple multiplication
-à partir de $10^{10}$\cite{gmplibkaratsuba}.
+on passe d'une opération à l'autre qui sont définis par la taille en bit des
+deux opérandes. Ces seuils varient selon beaucoup de paramètres dont
+l'architecture. Les seuils par défaut défini par \emph{GMP} pour passer d'un
+algorithme à un autre sont
+
+\begin{itemize}
+  \item $30$ pour passer à Karatsuba
+  \item $100$ pour passer à Toom-3
+  \item $300$ pour passer à Toom-4
+  \item $350$ pour passer à Toom-6.5
+  \item $450$ pour passer à Toom-8.5
+\end{itemize}
 
 \footnotesize
 \bibliographystyle{apalike}
