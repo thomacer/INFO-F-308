@@ -500,6 +500,20 @@ algorithme à un autre sont
   \item $450$ pour passer à Toom-8.5
 \end{itemize}
 
+\subsection{La représentation modulaire dans GMP}
+
+La bibliothèque \emph{GMP} utilise moins la représentation modulaire pour résoudre les
+opération en multiprécision, c'est surement dû au fait que \emph{GMP} n'est pas
+une librairie faites spécifiquement pour résoudre des opérations lié à la
+\emph{cryptographie}. Néenmoins elle utilise la \emph{réduction de Montgommery}
+pour résoudre des \emph{exponentiation modulaire} (\cite{gmplibmodularpowering}) que
+je n'ai pas abordé dans ce papier mais qui résout des problèmes de la forme
+suivante
+
+$$c ≡ b^e (\bmod m ) {\displaystyle c\equiv b^{e}{\pmod {m}}} c\equiv b^{e}{\pmod {m}}$$
+
+Avec $b$ la base, $e$ l'exposant et $m$ un entier.
+
 \footnotesize
 \bibliographystyle{apalike}
 \bibliography{bibliography}
