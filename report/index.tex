@@ -9,7 +9,7 @@
 \usepackage[hidelinks]{hyperref}
 \usepackage{url}
 
-\title{Manipulations de grands entiers: arithmétique multiprécision}
+\title{Manipulations de grands entiers: arithmétique en multiprécision}
 \author{Thomas Perale\\
     \mbox{}\\\\
     Université Libre de Bruxelles, Département d'Informatique\\
@@ -22,113 +22,111 @@
 
 \maketitle
 
-\begin{abstract}
-
-\end{abstract}
-
 \section{Introduction}
 
-L'arithmétique multiprécision offre des méthodes pour faire des opérations sur
-des nombres d'une taille arbitraire. Pour résoudre des problèmes qui ont
-besoins d'utiliser des techniques d'arithmétique multiprécision des librairies
-existent. Par exemple \emph{GMP} et \emph{GNU MPFR} qui sont les plus
-répendues elles implémentent toutes les deux plusieurs algorithmes pour faire
-des opérations qui sont plus ou moins efficace selon le cas et moins naturelles
-que ceux utilisé pour la simple précision.
-Je m'attarderai ici sur les différents algorithmes utilisées pour faire de
-de la multiplication multiprécision sur des entiers et me baserai ensuite sur
-la librairie \emph{GMP} pour expliquer concrètement les méthodes employés pour
-faire des opérations multiprécisions.
+L'arithmétique en multiprécision offre des méthodes pour faire des opérations
+sur des nombres entiers d'une taille arbitraire. Pour résoudre des problèmes
+qui ont besoins d'utiliser des techniques d'arithmétique en multiprécision des
+bibliothèques existent, par exemple \emph{GMP} et \emph{GNU MPFR} qui sont les plus
+répendues. Elles implentent toutes les deux plusieurs algorithmes plus ou moins
+efficaces selon les cas et moins naturels que ceux utilisés pour la simple
+précision.
+Je m'attarderai ici sur les différents algorithmes utilisés pour faire de
+la multiplication en multiprécision sur des entiers et me baserai ensuite sur
+la bibliothèque \emph{GMP} pour expliquer concrètement les méthodes employées.
 
-\section{Qu'est-ce que c'est l'artithmétique multiprécision}
+\section{Qu'est-ce que c'est l'artithmétique en multiprécision}
 
-L'arthmétique multiprécision regroupe toutes les techniques utilisé dans des
+L'arthmétique en multiprécision regroupe toutes les techniques utilisées dans des
 programmes pour résoudre des opérations sur des nombres de taille
-arbitraire\cite{wikimultiprecision}.
+arbitraire (\cite{wikimultiprecision}).
 Celle-ci s'oppose à l'arithmétique simple précision qui ne s'occupe que des
-nombres entre 8 et 64 bits selon l'architecture de l'ordinateur où est executé
-le programme, et dont les opérations sont des instructions du
-processeurs\cite{wikimultiprecision}.
+nombres entre 8 et 64 bits, selon l'architecture de l'ordinateur où est executé
+le programme, et dont les opérations sont des instructions physiques du
+processeurs (\cite{wikimultiprecision}).
 
 \section{Les opérations simple précision}
 
-Les opérations simple précision sont régulièrement implémenté comme des
-instructions processeurs ou sont émulés ce qui offre un avantage de rapidité.
-Les opérations sont les suivantes\cite{wikialu}:
+Les opérations en simple précision sont naturellement implentées comme des
+instructions processeurs ce qui offre un avantage de rapidité. Ces opérations
+sont parfois émulées dans des languages comme \emph{Java}.\\
+
+Les opérations sont les suivantes (\cite{wikialu}):
 
 \begin{itemize}
-  \item L'addition.
-  \item L'addition avec report. Si l'addition dépasse la limite de
-    l'architecture, c'est indiqué dans un report.
-  \item La soustraction.
-  \item La soustraction avec report.
-  \item Incrementaion.
-  \item Decrémentation.
-  \item ET logique.
-  \item OU logique.
-  \item OU exclusif logique.
-  \item Complément à un.
-  \item Décalage à gauche ou à droite.
-  \item Rotation
-  \item Rotation avec report.
+  \item L'addition;
+  \item L'addition avec report;
+  \item La soustraction;
+  \item La soustraction avec report;
+  \item Incrementaion;
+  \item Decrémentation;
+  \item ET logique;
+  \item OU logique;
+  \item OU exclusif logique;
+  \item Complément à un;
+  \item Décalage à gauche ou à droite;
+  \item Rotation;
+  \item Rotation avec report;
+  \item etc \dots
 \end{itemize}
 
-Ces opérations sont importante parce qu'elles sont à la base des algorithmes
-utilisé pour les opérations multiprécisions.
+Ces opérations sont importantes parce qu'elles sont à la base des algorithmes
+utilisés pour les opérations en multiprécision.
 
 \subsection{Représentation}
 
 La représentation des nombres en simple précision est totalement dépendante de
-l'architecture de l'ordinateur sur lesquels ces opérations sont executés.
-Généralement les nombres entiers sont représenté dans les architectures actuels
-sous forme d'un nombre binaire de 64 bits en complément à deux.
+l'architecture de l'ordinateur sur lequel ces opérations sont executés.
+Généralement les nombres entiers sont représentés dans les architectures
+actuels sous forme d'un nombre binaire de 64 bits en complément à deux.
 
 \section{L'arithmétique multiprécision}
 
-L'arithmétique multiprécision offre des algorithmes pour les opérations moins
-évidents que ceux en simple précision mais permets de résoudre des opérations
-sur des nombres de taille arbitraire. Les représentations et les algorithmes et
-les représentations ne sont plus ici contraint par l'architecture du processeur
-ce qui permet de varier la représentation selon l'algorithme utilisé pour
-l'opération.
+La forme des nombres en multiprécision n'étant pas leur forme
+\emph{naturelle}, les opérations n'ont pas de solutions physique offerte
+par le processeur mais doivent se base sur ces opérations de base pour créer
+des nouveaux algorithme. Comme les représentations n'ont plus la contrainte
+du format des nombres de l'architecture du processeur, la représentation peut
+varier selon les opérations et leurs opérandes.
 
 \subsection{Représentation vectorielle}
 
-Si les nombres sont plus grand que la limite imposé par l'architecture, afin de
-faire de l'arithmétique multiprécision, les nombres peuvent être représenter
-dans une forme vectorielle. C'est à dire que le nombre est représenter dans un
-vecteur d'entier lorsqu'il y a un report celui-ci est ajouté à l'élément
-suivant du vecteur.\\
+Si les nombres sont plus grands que la limite imposée par l'architecture, afin
+de faire de l'arithmétique multiprécision, les nombres peuvent être représentés
+dans une forme vectorielle. C'est à dire que chaque nombre est représenté par un
+vecteur d'entiers de taille correspond à la représentation en arithmétique
+simple sous-jacente.
 
 Dans notre cas on leur donnera cette notation:
 
-  $$u = (u_{2n-1} \dots u_1 u_0)$$
+  $$u = (u_{n-1} \dots u_1 u_0)$$
 
-Pour bien montrer la division en plusieurs éléments dans un vecteur.
+Qui illustre la division du nombre en multiple éléments du vecteur.
 
 % TODO Schéma
 
 \subsection{Représentation modulaire}
 
-La représentation modulaire est utilisé parce qu'elle permet de ne pas
-travailler sur les nombres eux-même mais sur les restes de leur division
-\cite{wikiamodulaire}.\\
+La représentation modulaire est utilisée parce qu'elle permet de ne pas
+travailler sur les nombres eux-mêmes mais sur les restes de leur division
+ainsi que sur les différentes bases ou modulos (\cite{wikiamodulaire}).\\
 
-Si on utilise des numbres $(m_1, m_2, \dots m_r)$ premiers entre eux,
+Si on utilise des nombres $(m_{n - 1}, \dots m_1, m_0)$ premiers entre eux,
 on peut facilement calculer
 
-  $$u_1 = u \mod m_1$$
-  $$u_2 = u \mod m_2$$
+$$u_{n - 1} = u \mod m_{n - 1}$$
   $$\dots$$
-  $$u_r = u \mod m_r$$
+  $$u_1 = u \mod m_1$$
+  $$u_0 = u \mod m_0$$
 
-Et on retrouver $u$ à partir de $u_1, u_2, \dots, u_r$, ce qui
-est une conséquence du \emph{théorème du reste chinois}.\\
+  Et on retrouver $u$ à partir de $u_{n - 1}, \dots, u_1, u_0$, ce qui
+est une conséquence du \emph{théorème du reste chinois}. Par conséquent $u$
+peut être représenté par un vecteur $(u_{n - 1}, \dots, u_{1}, u_{0})$\\
 
 L'arithmétique modulaire est particulièrement utile dans le domaine de la
-cryptographie de part sa capacitée de réduire des nombres premiers entre eux à
-des nombres de petite taille, où les opérations peuvent être executés
-parallèlement car elle s'éffectue sur chaque module de manière indépendante.
+cryptographie où les multiplications, additions, exponentiations et réductions
+modulos sont très fréquentes. Les représentations modulaires réalisent ces
+opérations directement sur chaque élément, et en parallèle.
 
 \section{Algorithme des opérations multiprécisions}
 
@@ -136,81 +134,97 @@ parallèlement car elle s'éffectue sur chaque module de manière indépendante.
 
 \subsubsection{Addition}
 
-L'algorithme pour résoudre une addition sous forme vectorielle est simple.
+L'algorithme pour réaliser une addition sous forme vectorielle est simple.
 Il se base sur l'addition en simple précision tout en ayant l'avantage de
 pouvoir faire des additions sur des nombres de taille arbitraire. \\
 
-Pour additionner un nombre en représentation vectorielle on additionne chacun
-des éléments du vecteur entre eux et on ajoute les reports éventuels à
-l'élément suivant du vecteur. \\
+L'algorithme d'addition des nombres en représentation vectorielle est une
+application de la méthode \emph{calcul écrit} mais appliqué sur une base
+différente, dépendante de l'architecture. Pour effectuer l'addition de $u =
+(u_{n - 1}, \dots, u_1, u_0)$ par $v = (v_{n - 1}, \dots, v_1, v_0)$ il faut
+additionner un par un chaque élément du vecteur $u$ par son élément
+correspondant dans le vecteur $v$ en s'assurant que les reports éventuels son
+ajouté à l'élément suivant du vecteur.\\
 
-La complexité de cet algorithme dépend du nombre d'élément dans le vecteur et
-la réponse sera un vecteur de même taille que le plus grand des opérandes
-utiliśe dans l'addition.\\
+Soit $r = (r_{n - 1}, \dots, r_{1}, r_{0})$ le vecteur des reports de
+l'addition où chaque élément équivaut à $1$ ou $0$ selon que l'addition aie un
+report comme résultat ou non. Le résultat de l'addition est le suivant.
 
-J'ai parlé ici de l'addition mais le principe est le même pour la soustraction
-si les nombres sont représenté sous la forme d'un complément à deux, car il
+$$w = (r_{n - 1}, u_{n - 1} + v_{n - 1} + r_{n - 2}, \dots, u_1 + v_1 + r_0, u_0 + v_0)$$
+
+La complexité de cet algorithme est linéaire, elle  dépend du nombre d'élément
+dans le vecteur.
+La réponse sera un vecteur de même taille que le plus grand des opérandes
+utiliśs dans l'addition ou de la $taille + 1$ si les opérandes sont
+identiques et maximum.\\
+
+J'ai parlé ici de l'addition, mais le principe est le même pour la soustraction
+si les nombres sont représentés sous la forme d'un complément à deux, car il
 permet d'effectuer les opérations sur des nombres négatif de la même
-manière\cite{wikicomplementtwo}.
+manière (\cite{wikicomplementtwo}).
 
-\subsubsection{Multiplications}
+\subsubsection{Multiplication}
 
-C'est la multiplication qui est au coeur de l'arithmétique multiprécision, car
-plus le nombre est grand plus il existe des manières d'optimiser la
-multiplication.\\
+C'est la multiplication qui est au coeur de l'arithmétique en multiprécision,
+car plus une multiplication implique des grands nombres, plus il existe des
+manières d'optimiser l'opération.\\
 
 On pourrait de la même manière que pour l'addition utiliser la méthode
-\emph{calcul écrit} ce qui pour la multiplication nous donne un algorithme de
-complexité quadratique. En effet pour résoudre la multiplication d'un nombre de
-taill $m$ par un nombre de taille $n$ il faut $cnm$ opérations (avec $c$ un
-nombre constant d'opération).  Cette approche est tout à fait correct quand on
-doit manipuler des petits nombres mais demande trop de ressource pour manipuler
-des grand nombres, surtout lorsqu'il existe des alternatives.
+\emph{''calcul écrit''} ce qui pour la multiplication nous donne un algorithme de
+complexité quadratique dans la taille des opérations.
+En effet pour effectuer la multiplication d'un nombre de taille $m$ par un nombre
+de taille $n$ il faut $cnm$ opérations (avec $c$ un nombre constant
+d'opérations).
+Cette approche est tout à fait correct quand on doit manipuler des petits
+nombres mais demande trop de ressource pour manipuler de grand nombres, surtout
+qu'il existe des alternatives plus efficaces.
 
-\subsubsection{L'algorithme de karatsuba ou Toom-2}
+\subsubsection{L'algorithme de Karatsuba ou Toom-2}
 
 Cet algorithme permet de résoudre la multiplication d'un nombre
-$u = (u_{2n-1} \dots u_1 u_0)$ par un nombre $v = (v_{2n-1} \dots v_1 v_0)$
-avec une complexitée de $\mathcal{O}(N^{\log{3}/\log{2}})$.\\
+$u = (u_{n-1} \dots u_1 u_0)$ par un nombre $v = (v_{n-1} \dots v_1 v_0)$
+avec une complexitée de $\mathcal{O}(n^{\log{3}/\log{2}})$.\\
 
 Afin d'y arriver, les nombres $u$ et $v$ sont divisés en deux parties de taille
 égale:
 
-  $$u = 2^{n} U_1 + U_0$$
-  $$v = 2^{n} V_1 + V_0$$
+  $$u = u_1 t + u_0$$
+  $$v = v_1 t + v_0$$
 
-Ce qui permet de résoudre la multiplication de la façon suivante
+Avec $t$ le décalage pour diviser $u$ et $v$ en deux. Diviser les opérandes en deux
+parties permet de résoudre la multiplication de la façon suivante
 
-  $$uv = (2^{2n} + 2^n) U_1 V_1 + 2^n (U_1 - U_0) (V_0 - V_1) + (2^n + 1) U_0 V_0$$
+  $$uv = (2^{2n} + 2^n) u_1 v_1 + 2^n (u_1 - u_0) (v_0 - v_1) + (2^n + 1) u_0 v_0$$
 
 Cette opération réduit un problème de complexité quadratique à 3 multiplications
 ainsi que des \emph{shifts} et des additions.
 L'algorithme a une complexité $\mathcal{O}(N^{\log{3}/\log{2}})$ ce  qui
 correspond à $3$ multiplications sur des nombres $\frac{1}{2}$ fois plus petits
-que les originaux\cite{gmplibkaratsuba}.
+que les originaux (\cite{gmplibkaratsuba}).
+L'algorithme est tout particulièrement efficace lorsque les opérandes sont déjà
+en représentation vectorielle dans un vecteur de taille 2, l'opération de
+division devient alors une étape inutile de l'algorithme.
 
 \subsubsection{L'algorithme Toom-3}
 
 Toom-3 est un autre algorithme utilisé pour la multiplication de deux
-entiers. Pour se faire, chaque opérande est divisé en 3 (là où karatsuba
-divisait en 2) partie de taille égale afin d'être traité comme le
-coefficient de deux polynomes\cite{gmplib2014}.
+entiers. Pour se faire, chaque opérande est divisé en 3 (là où Karatsuba
+divisait en 2 partis de taille égale afin d'être traité comme le
+coefficient de deux polynomes (\cite{gmplib2014}).
 
     $$X(t) = x_2 t^2 + x_1 t + x_0$$
     $$Y(t) = y_2 t^2 + y_1 t + y_0$$
 
+Avec $t$ qui est comme pour \emph{Karatsuba} le décalage à appliquer à chaque
+partie de $X$ et $Y$ pour le diviser en trois parties.
 Le résultat de la multiplication aura donc la forme suivante
 
     $$W(t) = X(t) Y(t) =  w_4 t^4 + w_3 t^3 + w_2 t^2 + w_1 t + w_0$$
 
-L'approche \emph{naive} de résoudre \emph{X (t) * Y (t)} pourrait être utilisée
-mais celle-ci n'apporte aucun avantage en ce qui concerne la complexité de
-l'algorithme par rapport à une multiplication classique.\cite{gmplib2014}
-\newline
-Les polynomes de degré \emph{d} sont définis par \emph{d + 1} points. Cette
-propriété est utilisée par l'algorithme pour réduire le nombre d'opération, en
-évaluant le polynome en $0, 1, -1, -2, \infty$ ce qui enlève des multiplications
-à l'opération $X(t) Y(t)$\cite{wikitoom3}
+On sait qu'un polynome de degré $d$ peut être défini par $d + 1$ points. Cette
+propriété est utilisée par l'algorithme pour réduire le nombre d'opérations,
+en évaluant le polynome en $0, 1, -1, -2$ ce qui enlève des multiplications
+à l'opération $X(t) Y(t)$ ainsi et qu'en $\infty$ (\cite{wikitoom3})
 
     $$X (0) = x_{0} + x_{1} (0) + x_2 {(0)}^{2} = x_{0}$$
     $$X(1) = x_0 + x_1(1) + x_2{(1)}^2 = x_0 + x_1 + x_2$$
@@ -269,15 +283,14 @@ $$
 $$
 
 $${\displaystyle
-=
 \begin{pmatrix}
-  1 & 0 & 0 & 0 & 0 \\
-  1 & 1 & 1 & 1 & 1 \\
-  1 &-1 & 1 &-1 & 1 \\
-  1 &-2 & 4 &-8 &16 \\
-  0 & 0 & 0 & 0 & 1 \\
-\end{pmatrix}^{-1}
-
+  W (0) \\
+  W (1) \\
+  W (-1) \\
+  W (2) \\
+  W (\infty) \\
+\end{pmatrix}
+=
 \begin{pmatrix}
   x_2y_2 \\
   (4x_2 + 2x_1 + x_0) (4y_2+ 2y_1 + y_0)\\
@@ -287,22 +300,25 @@ $${\displaystyle
 \end{pmatrix}
 }$$
 
-\subsubsection{Les autres}
+\subsubsection{Les autres version de Toom}
 
-Comme on l'a vu les algorithmes précédent utilisent tous le même processus ils
-divisent les opérandes en un certain nombre de parties de taille égales. Le
-concept est extensible à l'infini ce qui permet de diminuer infiniment la
-complexité de la multiplication. Le problème est que plus on augment le nombre
-de partie utilisé pour diviser le nombre plus on doit effectuer des calculs
-matriciels compliqués, ce qui fait que les nombres doivent être très grand pour
-qu'on observe un gain de performance.
+Comme on l'a vu les algorithmes précédents de Toom-2 et de Toom-3 utilisent
+tous les deux le même processus ils divisent les opérandes en $n$ parties
+de taille égales pour former créer polynome qui est évalué en $n - 1$
+points.\\
+Le concept est extensible à l'infini, en ajoutant des coefficients aux
+polynomes créés à partir des opérande, on diminue la complexité de la
+multiplication au fur et à mesure que le degré du polynome augmente.\\
+Le problème est que plus on augmente le nombre de coefficient des polynomes
+plus on doit effectuer des calculs matriciels compliqués. À cause de ça pour
+qu'on observe un gain de performance on doit utiliser des opérandes de taille
+de plus en plus conséquente pour chaque coefficient ajouté.
 
 \subsection{Représentation modulaire}
 
 \subsubsection{Addition}
 
-L'addition l'addition se résout de la façon suivante en représentation
-modulaire.
+L'addition en représentation modulaire est calculée de la façon suivante
 
 \begin{equation}
   \begin{split}
@@ -323,7 +339,7 @@ $(u_1, \dots, u_r)$ est plus grand que $(v_1, \dots, v_r)$.
 
 \subsubsection{Multiplications}
 
-De la même manière pour effectuer une multiplication entre deux nombre en
+De la même manière pour effectuer une multiplication entre deux nombres en
 représentation modulaire
 
 \begin{equation}
@@ -336,35 +352,35 @@ On peut la calculer de la sorte
 
 \begin{equation}
   \begin{split}
-    (u_1, \dots, u_r) X (v_1, \dots, v_r) \mod M \\
-      \Rightarrow ((u_1 X v_1) \mod m_1, \dots, (u_r X v_r) \mod m_r)
+    (u_1, \dots, u_r)  (v_1, \dots, v_r) \mod M \\
+      \Rightarrow ((u_1 . v_1) \mod m_1, \dots, (u_r . v_r) \mod m_r)
   \end{split}
 \end{equation}
 
-\subsubsection{La réduction de montgomery}
+\subsubsection{La réduction de Montgomery}
 
-La réduction de montgomery est un algorithme qui permet d'effectuer une
-multiplication modulaire de manière efficace\cite{menezes1996crypto}.\\
+La réduction de Montgomery est un algorithme qui permet d'effectuer une
+multiplication modulaire de manière efficace (\cite{menezes1996crypto}).\\
 
 Soit un entier $n$ strictement positif et $R$ et $T$ des entiers tel que $R >
-n$ et $pgcd(R, n) = 1$ et $0 < T < Rn$, la réduction de montgomery est la
-méthode utilisé pour resoudre $T R^{-1} \mod n$, selon le choix de $R$ la
-réduction peut être calculer de manière efficace\cite{menezes1996crypto}.\\
+n$ et $pgcd(R, n) = 1$ et $0 < T < Rn$, la réduction de Montgomery est la
+méthode utilisé pour resoudre $T R' \mod n$. Selon le choix de $R$ la
+réduction peut être calculer de manière efficace (\cite{menezes1996crypto}).\\
 
-La forme \emph{montgomery} d'une multiplication de $u$ par $v$ est la
-suivante
+La forme \emph{Montgomery} d'une multiplication de $u$ par $v$ est la
+suivante (\cite{wikimontgomery})
 
 $$(uR \bmod N)(vR \bmod N) R' ≡ (uR)(vR) R' ≡ (u.v) R \pmod N$$
 
 Avec un entier $R'$ qui résout $RR' = 1 \pmod N$.\\
 
-La réduction de montgomery est totallement adapté pour résoudre des opérations
-en multiprécision car il permet de réduire la taille des nombres sur lesquelles
-on fait des opérations. Typiquement une implémentation de l'algorithme de
-montgomery s'assurerra que $R$ soit égale à $R = b^{x}$ ($b$ étant la base utilisé,
-c'est à dire 2 dans le cadre d'un ordinateur et $x$ un nombre pour que
-$pgcd(R, n) = 1$) pour que les opérations intermédiaire peuvent être résolue
-grace à des \emph{shifts}\cite{djguan2003montgomery}.
+La réduction de Montgomery est totallement adapté pour résoudre des opérations
+en multiprécision car elle permet de réduire la taille des nombres sur lesquels
+on fait des opérations. Typiquement une implentation de l'algorithme de
+Montgomery s'assurerra que $R$ soit égale à $R = b^{x}$ ($b$ étant la base
+utilisé, c'est à dire 2 dans le cadre d'un ordinateur et $x$ un nombre pour
+que $pgcd(R, n) = 1$) pour que les opérations intermédiaire puissent être
+faites grace à des \emph{shifts} (\cite{djguan2003montgomery}).
 
 % $$RR' - NN' = 1$$
 
@@ -376,66 +392,69 @@ grace à des \emph{shifts}\cite{djguan2003montgomery}.
 % RR' - NN' =  8⋅100 − 47⋅17 = 1, -> R' = 8 et N' = 47
 % (uR.vR).R' mod 17 = 12*8 mod 17 = 96 mod 17 = 11
 
-\section{La librairie GMP}
+\section{La bibliothèque GMP}
 
 \subsection{Introduction}
 
-La librairie \emph{GMP} (GNU Multiple Precision Arithmetic Library) est une
-librairie libre permettant d'effectuer de l'arithmétique multiprécision sur
+La bibliothèque \emph{GMP} (GNU Multiple Precision Arithmetic Library) est une
+bibliothèque libre permettant d'effectuer de l'arithmétique en multiprécision sur
 des entiers, comme sur des nombres rationnels en se focalisant sur les
-performances. La librairie choisis les algorithmes selon la taille des
+performances. La bibliothèque choisit les algorithmes selon la taille des
 opérandes pour offrir les meilleurs performances au cas par cas, mais aussi
 optimise ses algorithmes selon l'architecture sur laquelle ces algorithmes sont
 executés.
 \newline
-Cette librairie est souvent utilisée pour des applications liées à la
-cryptographie\cite{wikigmp}.
+Cette bibliothèque est souvent utilisée pour des applications liées à la
+cryptographie, l'analyse numérique ou les mathématiques experimentales
+(\cite{wikigmp}).
 
 \subsection{Les algorithme de multiplications}
 
-Les sections précédentes nous ont montré qu'on pouvait récursivement
-infiniment diminuer la complexité des algorithmes de multiplication.
+Les sections précédentes nous ont montré qu'on pouvait appliquer récursivement
+ces algorithmes pour diminuer la complexité des algorithmes de multiplication.
 Il est légitime de se demander pourquoi ne pas utiliser l'algorithme
 qui a la complexité la plus petite et quel algorithme utiliser dans
 quelle situation.\\
 
 La réponse à la première question est que ces algorithmes deviennent
-plus rapides à partir du moment ou les nombres multipliés sont
-suffisamment large. Le nombre d'opération ayant un coût constant
-très élevé pour résoudre l'algorithme, ceux-ci sont plus lents
-que des algorithmes de multiplication basique (en $\mathcal{O}(n^2)$)\\
+plus performant à partir du moment où les nombres multipliés sont
+suffisamment grands. Le nombre d'opérations constance étant de plus en plus
+couteuse selon les versions de $Toom$, ceux-ci sont plus lents pour des petits
+nombres que des algorithmes de multiplication basique (de complexité
+quadratique)\\
 
 Pour ce qui est de choisir un algorithme adéquat à la multiplication,
-la librairie GMP a choisi d'implémenter 7 algorithmes de multiplication
-qui sont utilisés au fûr et à mesure que la taille de l'opération
-augmente\cite{gmplibmultiplication}.
+la bibliothèque GMP a choisi d'implenter 7 algorithmes de multiplication
+qui sont utilisés au fûr et à mesure que la taille des opérandes
+augmente (\cite{gmplibmultiplication}).
 
 \begin{itemize}
-  \item La multiplication basique
-  \item Karatsuba
-  \item Toom-3
-  \item Toom-4
-  \item Toom-6.5
-  \item Toom-8.5
-  \item FFT
+  \item La multiplication basique;
+  \item Karatsuba;
+  \item Toom-3;
+  \item Toom-4;
+  \item Toom-6.5;
+  \item Toom-8.5;
+  \item FFT.
 \end{itemize}
 
-Les algorithmes de \emph{multiplication basique}, de \emph{karatsuba} et de
-\emph{Toom-3} ont déjà été abordé et c'est inutile d'en reparler car leur
-implémentation est la même à l'exception qu'ils sont spécialement optimisé pour
-chaque processeur avec des instruction assembleurs particulières.\\
+Les algorithmes de \emph{multiplication basique}, de \emph{Karatsuba} et de
+\emph{Toom-3} ont déjà été abordés et c'est inutile d'en reparler car leur
+implentation est la même à l'exception qu'ils sont spécialement optimisés pour
+chaque processeur avec des instructions en assembleur particulières.\\
 
-Par contre \emph{Toom-4}, \emph{Toom-6.5}, \emph{Toom-8.5} n'ont pas été abordé
-simplement car le fonctionnement reste identique. En effet \emph{Toom-4} ne
-fait que diviser le nombre en 4 coefficient là où \emph{Toom-3} le divisait en
-3 coefficient\cite{gmplibtoom4} et évalue $X(t)$ et $Y(t)$ en 7 points. Qu'en
-aux algorithmes \emph{Toom-x.5} ça signifie qu'on évalue $X(t)$ et $Y(t)$ en
-$2n$ points mais le foncitonnement est identique\cite{gmplibtoomhalf}.\\
+Par contre \emph{Toom-4}, \emph{Toom-6.5}, \emph{Toom-8.5} n'ont pas été
+décrits car le fonctionnement est similaire. En effet \emph{Toom-4} ne
+fait que diviser le nombre en 4 coefficients là où \emph{Toom-3} le divisait en
+3 coefficients (\cite{gmplibtoom4}) et évalue $X(t)$ et $Y(t)$ en 7 points.
+Pour ce qui est des algorithmes \emph{Toom-x.5} ça signifie qu'on évalue $X(t)$
+et $Y(t)$ en $2n$ points mais le foncitonnement est identique
+(\cite{gmplibtoomhalf}).\\
 
-La librairie implémente directement des \emph{seuils} pour lesquels
+La bibliothèque implente directement des \emph{seuils} pour lesquels
 on passe d'une opération à l'autre qui sont définis par la taille en bit des
 deux opérandes. Ces seuils varient selon beaucoup de paramètres dont
-l'architecture. Les seuils par défaut défini par \emph{GMP} pour passer d'un
+l'architecture. Les seuils par défaut définis par \emph{GMP} pour passer d'un
 algorithme à un autre sont
 
 \begin{itemize}
@@ -451,4 +470,3 @@ algorithme à un autre sont
 \bibliography{bibliography}
 
 \end{document}
-uer
