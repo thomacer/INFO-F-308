@@ -515,6 +515,46 @@ $$c ≡ b^e (\bmod m ) {\displaystyle c\equiv b^{e}{\pmod {m}}} c\equiv b^{e}{\p
 Avec $b$ la base, $e$ l'exposant et $m$ un entier.
 
 \footnotesize
+
+\section{Conclusion}
+
+Les algorithmes de multiprécision sont aujourd'hui indispensable même si
+beaucoup d'applications de la vie quotidienne ne sont pas contraintes par les
+architectures actuelles. C'est un tout autre discour pour la sécurité
+informatique, les recherches en mathématique, en physique ou encore dans
+d'autres domaines qui demandent de manipuler des grands nombres. La sécurité
+informatique par exemple est de plus en plus utilisé et importante pour
+les utilisateurs d'ordinateur, il suffit de visiter un site internet pour
+qu'on execute sur nos ordinateurs des algorithmes qui se basent sur les
+méthodes et les représentations qu'on a vu plus haut, et c'est là que c'est
+important de savoir que des bibliothèques comme \emph{GMP} portent une attention
+particulière à l'optimisation de ces algorithmes pour chacune des architectures
+sur lesquels elles pourraient être executées.\\
+
+Il est important de comprendre suite à la lecture de ce papier qu'il n'existe
+jamais une solution universelle quand il s'agit de résoudre des opérations en
+multiprécision. En effet chaque opération doit être prise au cas par
+cas, on a pu étudier que des facteurs comme la taille des opérandes, le type de
+représentation ou encore l'agencement des opérations avaient leur importance
+pour optimiser les opérations et améliorer les performances au maximum.\\
+
+De plus j'ai ici choisis de ne pas aborder des algorithmes qui ont leur place
+ici pour ne pas parler trop en détail du sujet, c'est le cas de l'algorithme
+\emph{FFT} (Fast Fourier Transform), qui est par ailleurs utilisé dans
+la librairie \emph{GMP}, ou l'algorithme de \emph{Schönhage et Strassen} qui
+sont asymptotiquement plus efficace que les algorithmes de \emph{Toom}.\\
+
+J'ai aussi choisis de ne pas comparer \emph{GMP} avec d'autres librairies
+faisant de l'arithmétique multiprécision comme par exemple \emph{GNU MPFR} ou
+\emph{OpenSSL}. Il aurait été interessant de faire une évaluation des
+performances selon l'opération de chacune d'elle pour savoir qu'elles sont les
+applications où une librairies est plus intéressante qu'une autre.\\
+
+Si le lecteur veut s'informer plus sur les algorithmes abordé ici, il est
+particulièrement interessant de lire les implémentations des algorithmes par
+\emph{GMP} ceux-ci on y apprend plus sur les optimisations de performances
+operées par les créateurs de la librairie.
+
 \bibliographystyle{apalike}
 \bibliography{bibliography}
 
