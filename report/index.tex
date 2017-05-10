@@ -117,9 +117,10 @@ on peut facilement calculer
   $$u_1 = u \mod m_1$$
   $$u_0 = u \mod m_0$$
 
-On sait retrouver $u$ à partir de $u_{n - 1}, \dots, u_1, u_0$, ce qui
-est une conséquence du \emph{théorème du reste chinois}. Par conséquent $u$
-peut être représenté par un vecteur $(u_{n - 1}, \dots, u_{1}, u_{0})$\\
+On sait retrouver $u \bmod \prod m_i$ à partir de $u_{n - 1}, \dots, u_1, u_0$,
+et donc retrouver $u$ si $0 ≤ u < \prod m_i$,  ce qui est une conséquence du
+\emph{théorème du reste chinois}. Par conséquent $u$ peut être représenté par
+un vecteur $(u_{n - 1}, \dots, u_{1}, u_{0})$\\
 
 L'arithmétique modulaire est particulièrement utile dans le domaine de la
 cryptographie où les multiplications, additions, exponentiations et réductions
@@ -153,7 +154,7 @@ $$w = (r_{n - 1}, u_{n - 1} + v_{n - 1} + r_{n - 2}, \dots, u_1 + v_1 + r_0, u_0
 La complexité de cet algorithme est linéaire, elle  dépend du nombre d'élément
 dans le vecteur.
 La réponse sera un vecteur de même taille que le plus grand des opérandes
-utiliés dans l'addition ou de taille $n + 1$ si l'addition des éléments $n - 1$
+utilisés dans l'addition ou de taille $n + 1$ si l'addition des éléments $n - 1$
 du vecteur a un report.\\
 
 J'ai parlé ici de l'addition, mais le principe est le même pour la soustraction
@@ -169,7 +170,7 @@ manières d'optimiser l'opération.\\
 
 On pourrait, de la même manière que pour l'addition, utiliser la méthode
 \emph{''calcul écrit''} ce qui pour la multiplication nous donne un algorithme de
-complexité quadratique dans la taille des opérations.
+complexité quadratique selon la taille des opérandes.
 En effet, pour effectuer la multiplication d'un nombre de taille $m$ par un nombre
 de taille $n$ il faut $cnm$ opérations (avec $c$ un nombre constant
 d'opérations).
@@ -189,12 +190,15 @@ Afin d'y arriver, les nombres $u$ et $v$ sont divisés en deux parties de taille
   $$u = u_1 t + u_0$$
   $$v = v_1 t + v_0$$
 
-Avec $t$ le décalage de $u_1$ et $v_1$ pour diviser $u$ et $v$ en deux parties.\\
+Avec $t$ le décalage de $u_1$ et $v_1$ pour diviser $u$ et $v$ en deux parties.
+On choisit évidemment $t = 2^\alpha$ où $\alpha$ est multiple de la taille en
+simple précision pour que découpe et recomposition soient des opérations non
+coûtantes.\\
 
 Diviser les opérandes en deux parties permet de résoudre la multiplication
 de la façon suivante
 
-  $$uv = (2^{2n} + 2^n) u_1 v_1 + 2^n (u_1 - u_0) (v_0 - v_1) + (2^n + 1) u_0 v_0$$
+  $$uv = (t^{2} + t) u_1 v_1 + t (u_1 - u_0) (v_0 - v_1) + (t + 1) u_0 v_0$$
 
 Cette opération réduit un problème de complexité quadratique à 3 multiplications
 ainsi que des \emph{shifts} et des additions.
@@ -203,7 +207,9 @@ correspond à $3$ multiplications sur des nombres $\frac{1}{2}$ fois plus petits
 que les originaux (\cite{gmplibkaratsuba}).
 L'algorithme est tout particulièrement efficace lorsque les opérandes sont déjà
 en représentation vectorielle avec un vecteur de taille 2, l'opération de
-division devient alors une étape inutile de l'algorithme.
+division devient alors une étape inutile de l'algorithme. Sinon, l'algorithme
+doit être appliqué récursivement sur ces nombres de taille demi jusqu'à arriver
+à une taille pouvant être directement traitée en simple précision.
 
 \subsubsection{L'algorithme Toom-3}
 
@@ -225,7 +231,7 @@ On sait qu'un polynome de degré $d$ peut être défini par $d + 1$ points. Cett
 propriété est utilisée par l'algorithme pour réduire le nombre d'opérations,
 en évaluant le polynome en $0, 1, -1, -2$ ce qui enlève des multiplications
 à l'opération $X(t) Y(t)$ ainsi qu'en $\infty$ (ce qui correspond à ne garder
-que le coefficient le plus grand) (\cite{wikitoom3})\\
+que le coefficient directeur) (\cite{wikitoom3})\\
 
 Le polynome $X(t)$ évalué vaut donc
 
@@ -235,15 +241,8 @@ Le polynome $X(t)$ évalué vaut donc
     $$X(2) = x_0 + x_1(2) + x_2{(2)}^2 = x_0 - 2 * x_1 + 4 * x_2$$
     $$X(\infty) = x_2$$
 
-Et le polynome $Y(t)$ vaut
-
-    $$Y(0) = y_{0} + y_{1} (0) + y_2 {(0)}^{2} = y_{0}$$
-    $$Y(1) = y_0 + y_1(1) + y_2{(1)}^2 = y_0 + y_1 + y_2$$
-    $$Y(-1) = y_0 + y_1(-1) + y_2{(-1)}^2 = y_0 - y_1 + y_2$$
-    $$Y(2) = y_0 + y_1(2) + y_2{(2)}^2 = y_0 - 2 * y_1 + 4 * y_2$$
-    $$Y(\infty) = y_2$$
-
-Ce qui équivaut à un polynome $W(t)$ de
+Et le polynome $Y(t)$ qui se construit de façon similaire. Le polynome $W(t)$
+équivaut à
 
     $$W(0) = X(0)Y(0) = w_0$$
     $$W(1) = X(1)Y(1) = w_4 + w_3 + w_2 + w_1 + w_0$$
@@ -504,11 +503,9 @@ pour résoudre des \emph{exponentiations modulaires} (\cite{gmplibmodularpowerin
 je n'ai pas abordé dans ce papier mais qui résolvent des problèmes de la forme
 suivante
 
-$$c ≡ b^e (\bmod m ) {\displaystyle c\equiv b^{e}{\pmod {m}}} c\equiv b^{e}{\pmod {m}}$$
+$$c \equiv b^{e} \pmod {m}$$
 
 Avec $b$ la base, $e$ l'exposant et $m$ un entier.
-
-\footnotesize
 
 \section{Conclusion}
 
@@ -549,6 +546,8 @@ Si le lecteur veut s'informer plus sur les algorithmes abordés ici, il est
 particulièrement intérressant de lire les implantations des algorithmes par
 \emph{GMP}, on y apprend plus sur les optimisations de performance
 operées par les créateurs de la bibliothèque.
+
+\footnotesize
 
 \bibliographystyle{apalike}
 \bibliography{bibliography}
