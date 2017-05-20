@@ -507,6 +507,29 @@ $$c \equiv b^{e} \pmod {m}$$
 
 Avec $b$ la base, $e$ l'exposant et $m$ un entier.
 
+\subsection{FFT}
+
+La transformation de Fourier rapide est plus particulier que les autres
+algorithmes de \emph{Toom} présenté (même si il garde la même structure),
+c'est pourquoi je vais rapidement le présenté sans entrer dans les détails.
+\emph{FFT} est le dernier algorithme, utilisé dans la librairie \emph{GMP}
+(\cite{gmplibfft}).\\
+
+L'algorithme permait de résoudre une multiplication
+
+$$xy \pmod 2^{M} + 1$$
+
+Où $M$ est un nombre plus grand que la somme de la taille de $x$ et $y$ en
+\emph{bits}. L'algorithme reprend les étapes de \emph{Toom-k}, mais là où
+\emph{Toom-k} créait des polynomes de degré $k$ opérandes, \emph{FFT-k} crée
+un polynome de degré $2^{k}$. Toutes les opérations qui sont invoqués au cours
+de l'algorithme (pour l'étapes d'évaluation du polynome par exemple) se font
+toujours \emph{modulo} de $2^{M'} + 1$ où $M' = 2\frac{M}{2^{k}}+k+3$ arrondi à
+un multiple de $2^k$ (\cite{gmplibfft}).\\
+
+L'évaluation se fait sur les points $g^i$ pour $i = 0$ à $2^{k}+1$ et où
+$g = 2^{\frac{2M'}{2^k}}$ (\cite{gmplibfft}).
+
 \section{Conclusion}
 
 Les algorithmes de multiprécision sont aujourd'hui indispensables même si
